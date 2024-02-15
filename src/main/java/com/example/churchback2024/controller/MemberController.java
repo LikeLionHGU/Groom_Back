@@ -1,6 +1,8 @@
 package com.example.churchback2024.controller;
 
 import com.example.churchback2024.controller.request.MemberRequest;
+import com.example.churchback2024.controller.response.member.MemberListResponse;
+import com.example.churchback2024.controller.response.member.MemberResponse;
 import com.example.churchback2024.dto.MemberDto;
 import com.example.churchback2024.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -15,12 +17,14 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping("/list")
-    public void findMemberList(){
-        memberService.getMemberList();
+    public ResponseEntity<MemberListResponse> findMemberList(){
+        MemberListResponse memberListResponse = memberService.getMemberList();
+        return ResponseEntity.ok(memberListResponse);
     }
 
     @PostMapping("/create")
     public void createMember(@RequestBody MemberRequest request){
         memberService.createMember(MemberDto.from(request));
     }
+
 }
