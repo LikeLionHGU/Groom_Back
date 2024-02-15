@@ -77,7 +77,7 @@ public class S3Service {
         return Optional.empty();
     }
 
-    // save to db
+    // save to db.
     public void save(S3Dto s3Dto) {
         Image image = Image.from(s3Dto);
         s3Repository.save(image);
