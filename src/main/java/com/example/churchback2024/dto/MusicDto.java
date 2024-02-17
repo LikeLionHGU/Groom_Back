@@ -12,34 +12,32 @@ import lombok.NoArgsConstructor;
 @Builder
 @Getter
 public class MusicDto {
+
     private Long musicId;
     private String musicName;
     private String code;
     private String link;
     private String description;
     private String musicImage;
-    private Long folderId;
+
 
     public static MusicDto from(MusicCreateRequest request) {
         return MusicDto.builder()
                 .musicName(request.getMusicName())
                 .code(request.getCode())
-                .link(request.getLink())
+                .link(request.getLinkcode())
                 .description(request.getDescription())
                 .musicImage(request.getMusicImage())
-                .folderId(request.getFolderId())
                 .build();
     }
 
     public static MusicDto from(MusicUpdateRequest request) {
         return MusicDto.builder()
-                .musicId(request.getMusicId())
                 .musicName(request.getMusicName())
                 .code(request.getCode())
                 .link(request.getLink())
                 .description(request.getDescription())
                 .musicImage(request.getMusicImage())
-                .folderId(request.getFolderId())
                 .build();
     }
 }
