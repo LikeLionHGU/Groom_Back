@@ -24,10 +24,20 @@ public class MusicController {
         return ResponseEntity.ok(musicListResponse);
     }
 
+//    @GetMapping("/{musicId}")
+//    public ResponseEntity<Music>findById(@PathVariable Long musicId){
+//        Music music = musicService.getMusic(musicId);
+//        return ResponseEntity.ok(music);
+//    }
+
+
+
     @PostMapping("/create")
-    public ResponseEntity<MusicResponse> createMusic(@RequestBody MusicCreateRequest request) {
-        MusicDto musicDto = musicService.createMusic(MusicDto.from(request));
-        return ResponseEntity.ok(new MusicResponse(musicDto));
+    public void createMusic(@RequestBody MusicCreateRequest request) {
+        // void 타입으로 정의된 memberService의 createMusic메서드를 실행하겠다.
+        musicService.createMusic(MusicDto.from(request));
+//        MusicDto musicDto = );
+//        return ResponseEntity.ok(new MusicResponse(musicDto));
     }
 
     @PatchMapping("/{musicId}")
@@ -36,9 +46,9 @@ public class MusicController {
     }
 
     @DeleteMapping("/{musicId}")
-    public ResponseEntity<Void> deleteMusic(@PathVariable Long musicId) {
+    public void deleteMusic(@PathVariable Long musicId) {
         musicService.deleteMusic(musicId);
-        return ResponseEntity.noContent().build();
+//        return ResponseEntity.noContent().build();
     }
 }
 
