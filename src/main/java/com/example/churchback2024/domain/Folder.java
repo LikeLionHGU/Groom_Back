@@ -1,5 +1,6 @@
 package com.example.churchback2024.domain;
 
+import com.example.churchback2024.dto.MemberDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,5 +22,8 @@ public class Folder extends BaseEntity {
 
     @Column(nullable = false)
     private String path;
+
+
+
 
 }
