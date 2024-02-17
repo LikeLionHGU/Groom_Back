@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class MemberCreateRequest {
-    private String email;
-    private String nickname;
+//    private String email;
+//    private String name;
     private String position;
 }

@@ -12,28 +12,32 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Member extends BaseEntity{
+public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
-
-    @Column(nullable = false)
-    private String nickname;
+    private String name;
     @Column(nullable = false)
     private String position;
     @Column(nullable = false, unique = true)
     private String email;
-    private String g_id;
+    private String googleId;
 
     public void update(MemberDto memberDto) {
-        this.nickname = memberDto.getNickname();
         this.position = memberDto.getPosition();
     }
 
     public static Member from(MemberDto memberDto) {
         return Member.builder()
-                .email(memberDto.getEmail())
-                .nickname(memberDto.getNickname())
+                .position(memberDto.getPosition())
+                .build();
+    }
+
+    public static Member from(String id, String name, String email, MemberDto memberDto) {
+        return Member.builder()
+                .googleId(id)
+                .name(name)
+                .email(email)
                 .position(memberDto.getPosition())
                 .build();
     }

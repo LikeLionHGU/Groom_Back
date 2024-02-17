@@ -1,15 +1,20 @@
 package com.example.churchback2024.service;
 
-import com.example.churchback2024.controller.response.member.MemberListResponse;
-import com.example.churchback2024.controller.response.member.MemberResponse;
 import com.example.churchback2024.domain.Member;
 import com.example.churchback2024.dto.MemberDto;
 import com.example.churchback2024.exception.member.DuplicateMemberException;
 import com.example.churchback2024.exception.member.MemberNotFoundException;
 import com.example.churchback2024.repository.MemberRepository;
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,23 +23,43 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional
 public class MemberService {
+    private final RestTemplate restTemplate = new RestTemplate();
+    @Value("${spring.oauth2.google.resource-uri}")
+    private String googleResourceUri;
     private final MemberRepository memberRepository;
 
-    public void createMember(MemberDto memberDto) {
-        Member member = memberRepository.findByEmail(memberDto.getEmail());
-        if(member != null){
-            System.out.println("이미 member에 있는 사람입니당.");
+    public void login(String accessToken, MemberDto memberDto) {
+        JsonNode userResourceNode = getUserResource(accessToken);
+
+        System.out.println("userResourceNode = " + userResourceNode);
+
+        String id = userResourceNode.get("id").asText();
+        String email = userResourceNode.get("email").asText();
+        String name = userResourceNode.get("name").asText();
+
+        Member member = memberRepository.findByEmail(email);
+        if (member != null) {
             throw new DuplicateMemberException();
         }
-        memberRepository.save(Member.from(memberDto));
+        memberRepository.save(Member.from(id, name, email, memberDto));
     }
-    public MemberListResponse getMemberList() {
+
+    private JsonNode getUserResource(String accessToken) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + accessToken);
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        ResponseEntity<JsonNode> responseEntity = restTemplate.exchange(googleResourceUri, HttpMethod.GET, entity, JsonNode.class);
+        return responseEntity.getBody();
+    }
+
+    public List<MemberDto> getMemberList() {
         List<Member> members = memberRepository.findAll();
-        List<MemberResponse> memberResponses = members.stream()
-                .map(MemberResponse::new)
+        return members.stream()
+                .map(MemberDto::from)
                 .collect(Collectors.toList());
-        return new MemberListResponse(memberResponses);
     }
+
     public Member updateMember(Long memberId, MemberDto memberDto) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException());
         member.update(memberDto);
