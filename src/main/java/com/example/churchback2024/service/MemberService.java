@@ -4,16 +4,12 @@ import com.example.churchback2024.controller.response.member.MemberListResponse;
 import com.example.churchback2024.controller.response.member.MemberResponse;
 import com.example.churchback2024.domain.Member;
 import com.example.churchback2024.dto.MemberDto;
-import com.example.churchback2024.exception.DuplicateMemberException;
-import com.example.churchback2024.exception.MemberNotFoundException;
+import com.example.churchback2024.exception.member.DuplicateMemberException;
+import com.example.churchback2024.exception.member.MemberNotFoundException;
 import com.example.churchback2024.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.stream.Collectors;
