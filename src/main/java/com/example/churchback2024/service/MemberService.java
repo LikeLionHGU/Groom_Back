@@ -2,8 +2,8 @@ package com.example.churchback2024.service;
 
 import com.example.churchback2024.domain.Member;
 import com.example.churchback2024.dto.MemberDto;
-import com.example.churchback2024.exception.DuplicateMemberException;
-import com.example.churchback2024.exception.MemberNotFoundException;
+import com.example.churchback2024.exception.member.DuplicateMemberException;
+import com.example.churchback2024.exception.member.MemberNotFoundException;
 import com.example.churchback2024.repository.MemberRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.example.churchback2024.exception;
+package com.example.churchback2024.exception.member;
 
 public class MemberNotFoundException extends RuntimeException{
     public MemberNotFoundException() {
