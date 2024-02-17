@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 public class MusicCreateRequest {
     private String musicName;
     private String code;
-    private String link;
+    private String linkcode;
     private String description;
     private String musicImage;
-    private Long folderId;
+
 }
