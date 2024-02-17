@@ -1,4 +1,4 @@
-package com.example.churchback2024.exception;
+package com.example.churchback2024.exception.group;
 
 public class DuplicateGroupException extends RuntimeException {
     public DuplicateGroupException() {
