@@ -1,4 +1,4 @@
-package com.example.churchback2024.exception;
+package com.example.churchback2024.exception.member;
 
 public class DuplicateMemberException extends RuntimeException {
     public DuplicateMemberException() {

@@ -3,7 +3,7 @@ package com.example.churchback2024.controller;
 import com.example.churchback2024.controller.request.member.MemberCreateRequest;
 import com.example.churchback2024.controller.request.member.MemberUpdateRequest;
 import com.example.churchback2024.controller.response.member.MemberListResponse;
-import com.example.churchback2024.controller.response.member.MemberResponse;
+
 import com.example.churchback2024.domain.Member;
 import com.example.churchback2024.dto.MemberDto;
 import com.example.churchback2024.service.MemberService;

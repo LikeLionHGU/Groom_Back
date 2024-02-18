@@ -6,16 +6,13 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class MusicUpdateRequest {
-    private Long musicId;
+//    private Long musicId;
     private String musicName;
     private String code;
     private String link;
     private String description;
     private String musicImage;
-    private Long folderId;
 
-    public Long getMusicId() {
-        return musicId;
-    }
-}
+  }
+
 

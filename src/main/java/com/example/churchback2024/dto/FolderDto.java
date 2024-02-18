@@ -1,7 +1,7 @@
 package com.example.churchback2024.dto;
 
-import com.example.churchback2024.controller.request.folder.FolderCreateRequest;
-import com.example.churchback2024.controller.request.folder.FolderUpdateRequest;
+import com.example.churchback2024.controller.request.Folder.FolderCreateRequest;
+import com.example.churchback2024.controller.request.Folder.FolderUpdateRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Getter
+
 public class FolderDto {
     private Long folderId;
     private String folderName;
@@ -29,4 +30,6 @@ public class FolderDto {
                 .path(request.getPath())
                 .build();
     }
+
+
 }

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Member extends BaseEntity {
+public class Member extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
@@ -26,7 +26,6 @@ public class Member extends BaseEntity {
     public void update(MemberDto memberDto) {
         this.position = memberDto.getPosition();
     }
-
     public static Member from(MemberDto memberDto) {
         return Member.builder()
                 .position(memberDto.getPosition())
