@@ -1,6 +1,7 @@
 package com.example.churchback2024.controller.response.member;
 
 import com.example.churchback2024.domain.Member;
+import com.example.churchback2024.dto.MemberDto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,10 +9,13 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberResponse {
-    private String nickname;
+    private String name;
+    private String email;
     private String position;
-    public MemberResponse(Member member) {
-        this.nickname = member.getNickname();
-        this.position = member.getPosition();
+
+    public MemberResponse(MemberDto memberDto) {
+        this.name = memberDto.getName();
+        this.email = memberDto.getEmail();
+        this.position = memberDto.getPosition();
     }
 }
