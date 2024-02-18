@@ -30,7 +30,6 @@ public class Member extends BaseEntity{
         this.nickname = memberDto.getNickname();
         this.position = memberDto.getPosition();
     }
-
     public static Member from(MemberDto memberDto) {
         return Member.builder()
                 .email(memberDto.getEmail())

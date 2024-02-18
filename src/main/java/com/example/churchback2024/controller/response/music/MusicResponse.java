@@ -32,6 +32,4 @@ public class MusicResponse {
 //        this.folderId = musicDto.getFolderId();
     }
 
-
-
 }
