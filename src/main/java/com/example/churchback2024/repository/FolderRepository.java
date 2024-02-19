@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FolderRepository extends JpaRepository<Folder, Long> {
     Folder findByFolderName (String folderName);
+    Folder findByPath (String path);
 }

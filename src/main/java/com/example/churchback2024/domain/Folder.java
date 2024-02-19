@@ -28,13 +28,10 @@ public class Folder extends BaseEntity {
         this.path = FolderDto.getPath();
     } // 새로운 값으로 변경
 
-
-
     public static Folder from(FolderDto folderDto) {
         return Folder.builder()
                 .folderName(folderDto.getFolderName())
                 .path(folderDto.getPath())
                 .build();
     } //새로운 Folder 객체생성
-
 } //완성

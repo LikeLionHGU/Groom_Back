@@ -2,13 +2,17 @@ package com.example.churchback2024.controller;
 
 import com.example.churchback2024.controller.request.Folder.FolderCreateRequest;
 import com.example.churchback2024.controller.request.Folder.FolderUpdateRequest;
-import com.example.churchback2024.controller.response.Folder.FolderListResponse;
+import com.example.churchback2024.controller.response.folder.FolderListResponse;
+import com.example.churchback2024.controller.response.folder.FolderResponse;
 import com.example.churchback2024.domain.Folder;
 import com.example.churchback2024.dto.FolderDto;
 import com.example.churchback2024.service.FolderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,5 +44,9 @@ public class FolderController {
         folderService.deleteFolder(folderId);
     }
 
+    @GetMapping("list/{path}")
+    public ResponseEntity<FolderResponse> getFolderByPath(@PathVariable("path") String path) {
+        return ResponseEntity.ok(folderService.getFolderByPath(path));
+    }
 
 }

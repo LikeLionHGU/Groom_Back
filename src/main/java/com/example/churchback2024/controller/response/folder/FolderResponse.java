@@ -1,4 +1,4 @@
-package com.example.churchback2024.controller.response.Folder;
+package com.example.churchback2024.controller.response.folder;
 
 
 import com.example.churchback2024.domain.Folder;
@@ -17,7 +17,4 @@ public class FolderResponse {
         this.folderName = folder.getFolderName();
         this.path = folder.getPath();
     }
-
-
-
 }

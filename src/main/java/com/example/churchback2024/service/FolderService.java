@@ -1,7 +1,7 @@
 package com.example.churchback2024.service;
 
-import com.example.churchback2024.controller.response.Folder.FolderListResponse;
-import com.example.churchback2024.controller.response.Folder.FolderResponse;
+import com.example.churchback2024.controller.response.folder.FolderListResponse;
+import com.example.churchback2024.controller.response.folder.FolderResponse;
 import com.example.churchback2024.domain.Folder;
 import com.example.churchback2024.dto.FolderDto;
 import com.example.churchback2024.exception.folder.DuplicateFolderException;
@@ -23,7 +23,6 @@ public class FolderService {
     public void createFolder(FolderDto folderDto) {
         Folder folder = folderRepository.findByFolderName(folderDto.getFolderName());
         if(folder != null){
-            System.out.println("이미 folder에 있는 사람입니다람쥐.");
             throw new DuplicateFolderException();
         }
         folderRepository.save(Folder.from(folderDto));
@@ -37,6 +36,15 @@ public class FolderService {
         return new FolderListResponse(folderResponses);
     }
 
+    public FolderResponse getFolderByPath(String path) {
+        System.out.println("path = " + path);
+        Folder folder = folderRepository.findByPath(path);
+        if (folder == null) {
+            throw new FolderNotFoundException();
+        }
+        return new FolderResponse(folder);
+    }
+
     public Folder updateFolder(Long folderId, FolderDto folderDto) {
         Folder folder = folderRepository.findById(folderId)
                 .orElseThrow(FolderNotFoundException::new);
@@ -44,7 +52,6 @@ public class FolderService {
         folderRepository.save(folder);
         return folder;
     }
-
 
     public void deleteFolder(Long folderId) {
         folderRepository.deleteById(folderId);
