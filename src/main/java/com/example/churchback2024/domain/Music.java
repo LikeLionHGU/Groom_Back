@@ -25,7 +25,11 @@ public class Music extends BaseEntity {
     private String description;
     @Column(nullable = false)
     private String musicImage;
-    private Long folderId;
+//    private Long folderId;
+
+    @ManyToOne
+    @JoinColumn(name = "folderId")
+    private Folder folder;
 
     // BaseEntity 에 regDate,modDate 는 상속
 
