@@ -10,6 +10,9 @@ import com.example.churchback2024.service.MusicService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,11 +36,10 @@ public class MusicController {
 
 
     @PostMapping("/create")
-    public void createMusic(@RequestBody MusicCreateRequest request) {
-        // void 타입으로 정의된 memberService의 createMusic메서드를 실행하겠다.
-        musicService.createMusic(MusicDto.from(request));
-//        MusicDto musicDto = );
-//        return ResponseEntity.ok(new MusicResponse(musicDto));
+    public void createMusic(@RequestParam(value="image", required = false) MultipartFile image, @ModelAttribute MusicCreateRequest request) throws IOException {
+//        String path = request.getPath().replaceAll("-", "/");
+//        System.out.println("path : " + path);
+        musicService.createMusic(MusicDto.from(request), image, request.getPath());
     }
 
     @PatchMapping("/{musicId}")

@@ -17,14 +17,14 @@ public class Music extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long musicId;
 
-    @Column(nullable = false, unique = true)
+//    @Column(nullable = false, unique = true)
     private String musicName;
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private String code;
     private String link;
     private String description;
-    @Column(nullable = false)
-    private String musicImage;
+//    @Column(nullable = false)
+//    private String musicImage;
 //    private Long folderId;
 
     @ManyToOne
@@ -38,7 +38,7 @@ public class Music extends BaseEntity {
         this.code = musicDto.getCode();
         this.link = musicDto.getLink();
         this.description = musicDto.getDescription();
-        this.musicImage = musicDto.getMusicImage();
+//        this.musicImage = musicDto.getMusicImage();
     }
 
     public static Music from(MusicDto musicDto) {
@@ -47,7 +47,7 @@ public class Music extends BaseEntity {
                 .code(musicDto.getCode())
                 .link(musicDto.getLink())
                 .description(musicDto.getDescription())
-                .musicImage(musicDto.getMusicImage())
+//                .musicImage(musicDto.getMusicImage())
                 .build();
     }
     public static Music from(MusicDto musicDto, Folder folder) {
@@ -56,7 +56,7 @@ public class Music extends BaseEntity {
                 .code(musicDto.getCode())
                 .link(musicDto.getLink())
                 .description(musicDto.getDescription())
-                .musicImage(musicDto.getMusicImage())
+//                .musicImage(musicDto.getMusicImage())
                 .folder(folder)
                 .build();
     }

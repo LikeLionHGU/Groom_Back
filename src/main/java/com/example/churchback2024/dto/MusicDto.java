@@ -20,6 +20,22 @@ public class MusicDto {
     private String description;
     private String musicImage;
     private String path;
+    private String imageName;
+    private String imagePath;
+
+
+    public static MusicDto from(MusicCreateRequest request, String imageName, String imagePath) {
+        return MusicDto.builder()
+                .musicName(request.getMusicName())
+                .code(request.getCode())
+                .link(request.getLinkcode())
+                .description(request.getDescription())
+//                .musicImage(request.getMusicImage())
+                .path(request.getPath())
+                .imageName(imageName)
+                .imagePath(imagePath)
+                .build();
+    }
 
     public static MusicDto from(MusicCreateRequest request) {
         return MusicDto.builder()
@@ -27,7 +43,7 @@ public class MusicDto {
                 .code(request.getCode())
                 .link(request.getLinkcode())
                 .description(request.getDescription())
-                .musicImage(request.getMusicImage())
+//                .musicImage(request.getMusicImage())
                 .path(request.getPath())
                 .build();
     }
@@ -38,7 +54,14 @@ public class MusicDto {
                 .code(request.getCode())
                 .link(request.getLink())
                 .description(request.getDescription())
-                .musicImage(request.getMusicImage())
+//                .musicImage(request.getMusicImage())
+                .build();
+    }
+
+    public static MusicDto from(String imageName, String imagePath) {
+        return MusicDto.builder()
+                .imageName(imageName)
+                .imagePath(imagePath)
                 .build();
     }
 }
