@@ -21,7 +21,7 @@ public class MusicResponse {
         this.code = music.getCode();
         this.link = music.getLink();
         this.description = music.getDescription();
-        this.folderId = music.getFolderId();
+        this.folderId = music.getFolder().getFolderId();
     }
 
     public MusicResponse(MusicDto musicDto) {

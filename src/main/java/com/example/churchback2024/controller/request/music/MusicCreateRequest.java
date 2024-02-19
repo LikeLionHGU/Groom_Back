@@ -11,5 +11,6 @@ public class MusicCreateRequest {
     private String linkcode;
     private String description;
     private String musicImage;
+    private String path;
 
 }

@@ -25,7 +25,11 @@ public class Music extends BaseEntity {
     private String description;
     @Column(nullable = false)
     private String musicImage;
-    private Long folderId;
+//    private Long folderId;
+
+    @ManyToOne
+    @JoinColumn(name = "folderId")
+    private Folder folder;
 
     // BaseEntity 에 regDate,modDate 는 상속
 
@@ -35,7 +39,6 @@ public class Music extends BaseEntity {
         this.link = musicDto.getLink();
         this.description = musicDto.getDescription();
         this.musicImage = musicDto.getMusicImage();
-
     }
 
     public static Music from(MusicDto musicDto) {
@@ -45,6 +48,16 @@ public class Music extends BaseEntity {
                 .link(musicDto.getLink())
                 .description(musicDto.getDescription())
                 .musicImage(musicDto.getMusicImage())
+                .build();
+    }
+    public static Music from(MusicDto musicDto, Folder folder) {
+        return Music.builder()
+                .musicName(musicDto.getMusicName())
+                .code(musicDto.getCode())
+                .link(musicDto.getLink())
+                .description(musicDto.getDescription())
+                .musicImage(musicDto.getMusicImage())
+                .folder(folder)
                 .build();
     }
 }

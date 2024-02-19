@@ -19,7 +19,7 @@ public class MusicDto {
     private String link;
     private String description;
     private String musicImage;
-
+    private String path;
 
     public static MusicDto from(MusicCreateRequest request) {
         return MusicDto.builder()
@@ -28,6 +28,7 @@ public class MusicDto {
                 .link(request.getLinkcode())
                 .description(request.getDescription())
                 .musicImage(request.getMusicImage())
+                .path(request.getPath())
                 .build();
     }
 
