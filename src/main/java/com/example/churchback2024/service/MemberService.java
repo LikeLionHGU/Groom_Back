@@ -37,10 +37,6 @@ public class MemberService {
         String email = userResourceNode.get("email").asText();
         String name = userResourceNode.get("name").asText();
 
-        Member member = memberRepository.findByEmail(email);
-        if (member != null) {
-            throw new DuplicateMemberException();
-        }
         memberRepository.save(Member.from(id, name, email, memberDto));
     }
 
