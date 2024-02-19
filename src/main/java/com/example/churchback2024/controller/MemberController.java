@@ -1,10 +1,8 @@
 package com.example.churchback2024.controller;
 
-import com.example.churchback2024.controller.request.member.MemberCreateRequest;
-import com.example.churchback2024.controller.request.member.MemberUpdateRequest;
+import com.example.churchback2024.controller.request.member.MemberAddRequest;
 import com.example.churchback2024.controller.response.member.MemberListResponse;
 
-import com.example.churchback2024.domain.Member;
 import com.example.churchback2024.dto.MemberDto;
 import com.example.churchback2024.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +18,13 @@ import java.util.List;
 public class MemberController {
     private final MemberService memberService;
     @PostMapping("/login")
-    public void googleLogin(@RequestHeader("Authorization") String authorizationHeader, @RequestBody MemberCreateRequest request){
+    public void googleLogin(@RequestHeader("Authorization") String authorizationHeader){
         String accessToken = authorizationHeader.substring("Bearer ".length());
-        memberService.login(accessToken, MemberDto.from(request));
+        memberService.login(accessToken);
+    }
+    @PostMapping("/add")
+    public void add(@RequestBody MemberAddRequest request){
+        memberService.addMember(MemberDto.from(request));
     }
     @GetMapping("/list")
     public ResponseEntity<MemberListResponse> findMemberList(){
@@ -30,10 +32,7 @@ public class MemberController {
         MemberListResponse memberListResponse = new MemberListResponse(dtoList);
         return ResponseEntity.ok(memberListResponse);
     }
-    @PatchMapping("/{memberId}")
-    public ResponseEntity<Member> update(@PathVariable Long memberId, @RequestBody MemberUpdateRequest request){
-        return ResponseEntity.ok(memberService.updateMember(memberId, MemberDto.from(request)));
-    }
+
     @DeleteMapping("/{memberId}")
     public void delete(@PathVariable Long memberId){
         memberService.deleteMember(memberId);

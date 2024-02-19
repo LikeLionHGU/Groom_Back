@@ -1,6 +1,6 @@
 package com.example.churchback2024.dto;
 
-import com.example.churchback2024.controller.request.member.MemberCreateRequest;
+import com.example.churchback2024.controller.request.member.MemberAddRequest;
 import com.example.churchback2024.controller.request.member.MemberUpdateRequest;
 import com.example.churchback2024.domain.Member;
 import lombok.AllArgsConstructor;
@@ -18,9 +18,11 @@ public class MemberDto {
     private Long memberId;
     private String position;
     private String g_id;
-
-    public static MemberDto from(MemberCreateRequest request) {
+    private Long groupId;
+    public static MemberDto from(MemberAddRequest request) {
         return MemberDto.builder()
+                .email(request.getEmail())
+                .groupId(request.getGroupId())
                 .position(request.getPosition())
                 .build();
     }
@@ -38,7 +40,6 @@ public class MemberDto {
         return MemberDto.builder()
                 .name(member.getName())
                 .email(member.getEmail())
-                .position(member.getPosition())
                 .g_id(member.getGoogleId())
                 .build();
     }
