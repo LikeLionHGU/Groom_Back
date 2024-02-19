@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 @Entity
 @Getter
@@ -17,15 +18,13 @@ public class Music extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long musicId;
 
-    @Column(nullable = false, unique = true)
+//    @Column(nullable = false, unique = true)
     private String musicName;
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private String code;
     private String link;
     private String description;
-    @Column(nullable = false)
-    private String musicImage;
-//    private Long folderId;
+    private String path;
 
     @ManyToOne
     @JoinColumn(name = "folderId")
@@ -38,7 +37,7 @@ public class Music extends BaseEntity {
         this.code = musicDto.getCode();
         this.link = musicDto.getLink();
         this.description = musicDto.getDescription();
-        this.musicImage = musicDto.getMusicImage();
+        this.path = musicDto.getPath();
     }
 
     public static Music from(MusicDto musicDto) {
@@ -47,7 +46,7 @@ public class Music extends BaseEntity {
                 .code(musicDto.getCode())
                 .link(musicDto.getLink())
                 .description(musicDto.getDescription())
-                .musicImage(musicDto.getMusicImage())
+                .path(musicDto.getPath())
                 .build();
     }
     public static Music from(MusicDto musicDto, Folder folder) {
@@ -56,7 +55,7 @@ public class Music extends BaseEntity {
                 .code(musicDto.getCode())
                 .link(musicDto.getLink())
                 .description(musicDto.getDescription())
-                .musicImage(musicDto.getMusicImage())
+                .path(musicDto.getPath())
                 .folder(folder)
                 .build();
     }
