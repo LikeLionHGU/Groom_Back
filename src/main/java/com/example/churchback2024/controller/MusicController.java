@@ -26,31 +26,24 @@ public class MusicController {
         MusicListResponse musicListResponse = musicService.getMusicList();
         return ResponseEntity.ok(musicListResponse);
     }
-
-//    @GetMapping("/{musicId}")
-//    public ResponseEntity<Music>findById(@PathVariable Long musicId){
-//        Music music = musicService.getMusic(musicId);
-//        return ResponseEntity.ok(music);
-//    }
-
-
-
+    @GetMapping("/{musicId}")
+    public ResponseEntity<MusicResponse> findMusic(@PathVariable Long musicId) {
+        MusicResponse musicResponse = musicService.getMusic(musicId);
+        return ResponseEntity.ok(musicResponse);
+    }
     @PostMapping("/create")
     public void createMusic(@RequestParam(value="image", required = false) MultipartFile image, @ModelAttribute MusicCreateRequest request) throws IOException {
-//        String path = request.getPath().replaceAll("-", "/");
-//        System.out.println("path : " + path);
         musicService.createMusic(MusicDto.from(request), image, request.getPath());
     }
 
     @PatchMapping("/{musicId}")
-    public ResponseEntity<Music> updateMusic(@PathVariable Long musicId, @RequestBody MusicUpdateRequest request) {
-        return ResponseEntity.ok(musicService.updateMusic(musicId, MusicDto.from(request)));
+    public ResponseEntity<Music> updateMusic(@PathVariable Long musicId, @ModelAttribute MusicUpdateRequest request, @RequestParam(value="image", required = false) MultipartFile image) throws IOException {
+        return ResponseEntity.ok(musicService.updateMusic(musicId, MusicDto.from(request),image));
     }
 
     @DeleteMapping("/{musicId}")
     public void deleteMusic(@PathVariable Long musicId) {
         musicService.deleteMusic(musicId);
-//        return ResponseEntity.noContent().build();
     }
 }
 

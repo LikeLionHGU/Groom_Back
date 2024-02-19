@@ -10,8 +10,7 @@ import lombok.NoArgsConstructor;
 public class MusicCreateRequest {
     private String musicName;
     private String code;
-    private String linkcode;
+    private String link;
     private String description;
-//    private String musicImage;
     private String path;
 }

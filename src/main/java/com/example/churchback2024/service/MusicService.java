@@ -6,13 +6,11 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.churchback2024.controller.response.music.MusicListResponse;
 import com.example.churchback2024.controller.response.music.MusicResponse;
 import com.example.churchback2024.domain.Folder;
-import com.example.churchback2024.domain.Image;
 import com.example.churchback2024.domain.Music;
 import com.example.churchback2024.dto.MusicDto;
 import com.example.churchback2024.exception.music.DuplicateMusicException;
 import com.example.churchback2024.exception.music.MusicNotFoundException;
 import com.example.churchback2024.repository.FolderRepository;
-import com.example.churchback2024.repository.ImageRepository;
 import com.example.churchback2024.repository.MusicRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +35,6 @@ public class MusicService {
     private final MusicRepository musicRepository;
     private final FolderRepository folderRepository;
 
-    private final ImageRepository imageRepository;
 
     private final AmazonS3 amazonS3;
 
@@ -50,7 +47,7 @@ public class MusicService {
         String filePath = dirName + "/" + uploadFile.getName();
 
         putS3(uploadFile, fileName);
-        save(MusicDto.from(fileName, filePath));
+//        save(MusicDto.from(fileName, filePath));
         removeNewFile(uploadFile);
 
         return uploadFile.getName();
@@ -82,20 +79,18 @@ public class MusicService {
         return Optional.empty();
     }
 
-    public void save(MusicDto musicDto) {
-        Image image = Image.from(musicDto);
-        imageRepository.save(image);
-    }
     public void createMusic(MusicDto musicDto, MultipartFile multipartFile, String dirName) throws IOException {
         Music music = musicRepository.findByMusicName(musicDto.getMusicName());
         Folder folder = folderRepository.findByPath(musicDto.getPath());
-
+        if(folder == null){
+            throw new IllegalArgumentException("해당 경로의 폴더가 존재하지 않습니다.");
+        }
         File uploadFile = convert(multipartFile).orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환 실패"));
         uploadFileToS3(uploadFile, dirName);
 
-        if (music != null) {
-            throw new DuplicateMusicException("해당 이름의 악보가 이미 존재합니다.");
-        }
+//        if (music != null) {
+//            throw new DuplicateMusicException("해당 이름의 악보가 이미 존재합니다.");
+//        }
         musicRepository.save(Music.from(musicDto, folder));
     }
 
@@ -107,11 +102,18 @@ public class MusicService {
                 .collect(Collectors.toList());
         return new MusicListResponse(musicResponses);
     }
-
-    public Music updateMusic(Long musicId, MusicDto musicDto) {
-        Music music = musicRepository.findById(musicId)
-                .orElseThrow(MusicNotFoundException::new);
+    public MusicResponse getMusic(Long musicId) {
+        Music music = musicRepository.findById(musicId).orElseThrow(MusicNotFoundException::new);
+        return new MusicResponse(music);
+    }
+    public Music updateMusic(Long musicId, MusicDto musicDto, MultipartFile image) throws IOException {
+        Music music = musicRepository.findById(musicId).orElseThrow(MusicNotFoundException::new);
+        if (image != null && !image.isEmpty()) {
+            File uploadFile = convert(image).orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환 실패"));
+            uploadFileToS3(uploadFile, musicDto.getPath());
+        }
         music.update(musicDto);
+
         musicRepository.save(music);
         return music;
     }
@@ -125,4 +127,6 @@ public class MusicService {
         }
         musicRepository.deleteById(musicId);
     }
+
+
 }
