@@ -30,8 +30,7 @@ public class S3Service {
     private String bucket;
 
     public String uploadMultipartFile(MultipartFile multipartFile, String dirName) throws IOException {
-        File uploadFile = convert(multipartFile)
-                .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환 실패"));
+        File uploadFile = convert(multipartFile);
         return uploadFileToS3(uploadFile, dirName);
     }
 
@@ -66,15 +65,24 @@ public class S3Service {
     }
 
     // multipart to file
-    private Optional<File> convert(MultipartFile file) throws  IOException {
+//    private Optional<File> convert(MultipartFile file) throws  IOException {
+//        File convertFile = new File(file.getOriginalFilename());
+//        if(convertFile.createNewFile()) {
+//            try (FileOutputStream fos = new FileOutputStream(convertFile)) {
+//                fos.write(file.getBytes());
+//            }
+//            return Optional.of(convertFile);
+//        }
+//        return Optional.empty();
+//    }
+    private File convert(MultipartFile file) throws IOException {
         File convertFile = new File(file.getOriginalFilename());
         if(convertFile.createNewFile()) {
             try (FileOutputStream fos = new FileOutputStream(convertFile)) {
                 fos.write(file.getBytes());
             }
-            return Optional.of(convertFile);
         }
-        return Optional.empty();
+        return convertFile;
     }
 
     // save to db
