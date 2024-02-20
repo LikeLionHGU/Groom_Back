@@ -6,10 +6,8 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.churchback2024.controller.response.music.MusicListResponse;
 import com.example.churchback2024.controller.response.music.MusicResponse;
 import com.example.churchback2024.domain.Folder;
-import com.example.churchback2024.domain.GroupC;
 import com.example.churchback2024.domain.Music;
 import com.example.churchback2024.dto.MusicDto;
-import com.example.churchback2024.exception.music.DuplicateMusicException;
 import com.example.churchback2024.exception.music.MusicNotFoundException;
 import com.example.churchback2024.repository.FolderRepository;
 import com.example.churchback2024.repository.MusicRepository;
@@ -35,23 +33,23 @@ import java.util.stream.Collectors;
 public class MusicService {
     private final MusicRepository musicRepository;
     private final FolderRepository folderRepository;
-
-
     private final AmazonS3 amazonS3;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
+    @Value("${cloud.aws.region.static}")
+    private String region;
+    private String musicImageUrl = null;
+
     private String uploadFileToS3(File uploadFile, String dirName){
         UUID uuid = UUID.randomUUID();
         String fileName = dirName + "/" + uploadFile.getName() + "_" + uuid;
-        String filePath = dirName + "/" + uploadFile.getName();
 
         putS3(uploadFile, fileName);
-//        save(MusicDto.from(fileName, filePath));
         removeNewFile(uploadFile);
 
-        return uploadFile.getName();
+        return fileName;
     }
 
     private void removeNewFile(File targetFile){
@@ -80,65 +78,76 @@ public class MusicService {
         return Optional.empty();
     }
 
-    public void createMusic(MusicDto musicDto, MultipartFile multipartFile, String dirName) throws IOException {
-//        Folder folder = folderRepository.findByPath(musicDto.getPath());
-        Folder folder = folderRepository.findByPathAndMemberGroup_GroupC_GroupName(musicDto.getPath(), musicDto.getGroupName());
-        if(folder == null){
-            throw new IllegalArgumentException("해당 경로의 폴더가 존재하지 않습니다.");
-        }
-        File uploadFile = convert(multipartFile).orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환 실패"));
-        uploadFileToS3(uploadFile, dirName);
+    public MusicDto createMusic(MusicDto musicDto, MultipartFile multipartFile) throws IOException {
+        Folder folder = folderRepository.findById(musicDto.getFolderId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 경로의 폴더가 존재하지 않습니다."));
 
-        musicRepository.save(Music.from(musicDto, folder));
+        if (multipartFile != null && !multipartFile.isEmpty()) {
+            File uploadFile = convert(multipartFile)
+                    .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환 실패"));
+            musicImageUrl = uploadFileToS3(uploadFile, folder.getMemberGroup().getGroupC().getGroupName());
+        }
+
+        Music music = Music.from(musicDto, folder, musicImageUrl);
+        musicRepository.save(music);
+        String url = "https://" + bucket + ".s3." + region + ".amazonaws.com/" + musicImageUrl;
+        return MusicDto.from(music, generateImageUrl(music.getMusicImageUrl()));
     }
+
 
     public MusicListResponse getMusicList() {
         List<Music> musics = musicRepository.findAll();
 
         List<MusicResponse> musicResponses = musics.stream()
-                .map(MusicResponse::new)
+                .map(music -> new MusicResponse(music, generateImageUrl(music.getMusicImageUrl())))
                 .collect(Collectors.toList());
         return new MusicListResponse(musicResponses);
     }
     public MusicResponse getMusic(Long musicId) {
         Music music = musicRepository.findById(musicId).orElseThrow(MusicNotFoundException::new);
-        return new MusicResponse(music);
+        return new MusicResponse(music, generateImageUrl(music.getMusicImageUrl()));
     }
-    public Music updateMusic(Long musicId, MusicDto musicDto, MultipartFile image) throws IOException {
+    public MusicDto updateMusic(Long musicId, MusicDto musicDto, MultipartFile multipartFile) throws IOException {
+        Folder folder = folderRepository.findByFolderId(musicDto.getFolderId());
         Music music = musicRepository.findById(musicId).orElseThrow(MusicNotFoundException::new);
-        if (image != null && !image.isEmpty()) {
-            File uploadFile = convert(image).orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환 실패"));
-            uploadFileToS3(uploadFile, musicDto.getPath());
+        if (multipartFile != null && !multipartFile.isEmpty()) {
+            File uploadFile = convert(multipartFile)
+                    .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환 실패"));
+            musicImageUrl = uploadFileToS3(uploadFile, folder.getMemberGroup().getGroupC().getGroupName());
         }
-        music.update(musicDto);
+//        String url = "https://" + bucket + ".s3." + region + ".amazonaws.com/" + musicImageUrl;
+
+        music.update(musicDto, musicImageUrl);
 
         musicRepository.save(music);
-        return music;
+        return MusicDto.from(music, generateImageUrl(music.getMusicImageUrl()));
     }
 
     public void deleteMusic(Long musicId) {
-        // 1. musicId를 이용해서 해당 music이 존재하는지 찾기
         Music music = musicRepository.findByMusicId(musicId);
-        // 2. 있으면 삭제 / 없으면 exception 날리기
         if(music == null){
             throw new MusicNotFoundException();
         }
         musicRepository.deleteById(musicId);
     }
 
-    public MusicListResponse searchMusicByCode(String code) {
-        List<Music> musics = musicRepository.findByCodeContaining(code);
+    public MusicListResponse searchMusicByCode(Long groupId, String code) {
+        List<Music> musics = musicRepository.findByGroupAndCodeContaining(groupId, code);
         List<MusicResponse> musicResponses = musics.stream()
-                .map(MusicResponse::new)
+                .map(music -> new MusicResponse(music, generateImageUrl(music.getMusicImageUrl())))
                 .collect(Collectors.toList());
         return new MusicListResponse(musicResponses);
     }
-    public MusicListResponse searchMusicByMusicName(String musicName) {
-        List<Music> musics = musicRepository.findByMusicNameContaining(musicName);
+    public MusicListResponse searchMusicByMusicName(Long groupId, String musicName) {
+        List<Music> musics = musicRepository.findByGroupAndMusicNameContaining(groupId, musicName);
         List<MusicResponse> musicResponses = musics.stream()
-                .map(MusicResponse::new)
+                .map(music -> new MusicResponse(music, generateImageUrl(music.getMusicImageUrl())))
                 .collect(Collectors.toList());
         return new MusicListResponse(musicResponses);
+    }
+
+    private String generateImageUrl(String storedFileName) {
+        return "https://" + bucket + ".s3." + region + ".amazonaws.com/" + storedFileName;
     }
 
 }

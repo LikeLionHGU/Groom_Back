@@ -2,6 +2,7 @@ package com.example.churchback2024.dto;
 
 import com.example.churchback2024.controller.request.music.MusicCreateRequest;
 import com.example.churchback2024.controller.request.music.MusicUpdateRequest;
+import com.example.churchback2024.domain.Music;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,9 +19,8 @@ public class MusicDto {
     private String code;
     private String link;
     private String description;
-    private String musicImage;
-    private String path;
-    private String groupName;
+    private String musicImageUrl;
+    private Long folderId;
 
     public static MusicDto from(MusicCreateRequest request) {
         return MusicDto.builder()
@@ -28,31 +28,38 @@ public class MusicDto {
                 .code(request.getCode())
                 .link(request.getLink())
                 .description(request.getDescription())
-                .path(request.getPath())
-                .groupName(request.getGroupName())
+                .folderId(request.getFolderId())
                 .build();
     }
 
+    public static MusicDto from(Music music){
+        return MusicDto.builder()
+                .musicId(music.getMusicId())
+                .musicName(music.getMusicName())
+                .code(music.getCode())
+                .link(music.getLink())
+                .description(music.getDescription())
+                .musicImageUrl(music.getMusicImageUrl())
+                .build();
+    }
+    public static MusicDto from(Music music, String url){
+        return MusicDto.builder()
+                .musicId(music.getMusicId())
+                .musicName(music.getMusicName())
+                .code(music.getCode())
+                .link(music.getLink())
+                .description(music.getDescription())
+                .musicImageUrl(url)
+                .build();
+    }
     public static MusicDto from(MusicUpdateRequest request) {
         return MusicDto.builder()
                 .musicName(request.getMusicName())
                 .code(request.getCode())
                 .link(request.getLink())
                 .description(request.getDescription())
-                .path(request.getPath())
-                .build();
-    }
-
-    public static MusicDto from(String musicName, String path) {
-        return MusicDto.builder()
-                .musicName(musicName)
-                .path(path)
-                .build();
-    }
-
-    public static MusicDto from(String path) {
-        return MusicDto.builder()
-                .path(path)
+                .musicImageUrl(request.getMusicImageUrl())
+                .folderId(request.getFolderId())
                 .build();
     }
 }

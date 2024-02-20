@@ -29,8 +29,8 @@ public class Folder extends BaseEntity {
 
     public void update(FolderDto FolderDto) {
         this.folderName = FolderDto.getFolderName();
-        this.path = FolderDto.getPath();
-    } // 새로운 값으로 변경
+//        this.path = FolderDto.getPath();
+    }
 
     public static Folder from(FolderDto folderDto, MemberGroup memberGroup) {
         return Folder.builder()

@@ -10,7 +10,6 @@ import java.util.List;
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 public class MemberListResponse {
     private List<MemberResponse> members;
-
     public MemberListResponse(List<MemberDto> dtoList) {
         this.members = dtoList.stream()
                 .map(MemberResponse::new)

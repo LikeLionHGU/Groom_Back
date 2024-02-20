@@ -4,6 +4,7 @@ package com.example.churchback2024.controller.response.folder;
 import com.example.churchback2024.domain.Folder;
 
 
+import com.example.churchback2024.dto.FolderDto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,14 +12,24 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FolderResponse {
+    private Long folderId;
     private String folderName;
     private String path;
-    private String memberName;
-    private String  groupName;
+    private Long memberId;
+    private Long  groupId;
     public FolderResponse(Folder folder) {
+        this.folderId = folder.getFolderId();
         this.folderName = folder.getFolderName();
         this.path = folder.getPath();
-        this.memberName = folder.getMemberGroup().getMember().getName();
-        this.groupName = folder.getMemberGroup().getGroupC().getGroupName();
+        this.memberId = folder.getMemberGroup().getMember().getMemberId();
+        this.groupId = folder.getMemberGroup().getGroupC().getGroupId();
+    }
+
+    public FolderResponse(FolderDto folderDto) {
+        this.folderId = folderDto.getFolderId();
+        this.folderName = folderDto.getFolderName();
+        this.path = folderDto.getPath();
+        this.memberId = folderDto.getMemberId();
+        this.groupId = folderDto.getGroupId();
     }
 }

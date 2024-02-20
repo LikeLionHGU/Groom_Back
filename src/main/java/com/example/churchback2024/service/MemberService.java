@@ -1,14 +1,7 @@
 package com.example.churchback2024.service;
 
-import com.example.churchback2024.domain.GroupC;
 import com.example.churchback2024.domain.Member;
-import com.example.churchback2024.domain.MemberGroup;
 import com.example.churchback2024.dto.MemberDto;
-import com.example.churchback2024.exception.group.GroupNotFoundException;
-import com.example.churchback2024.exception.groupMember.DuplicateMemberGroupException;
-import com.example.churchback2024.exception.member.MemberNotFoundException;
-import com.example.churchback2024.repository.GroupRepository;
-import com.example.churchback2024.repository.MemberGroupRepository;
 import com.example.churchback2024.repository.MemberRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
@@ -32,19 +25,25 @@ public class MemberService {
     @Value("${spring.oauth2.google.resource-uri}")
     private String googleResourceUri;
     private final MemberRepository memberRepository;
-    private final GroupRepository groupRepository;
-    private final MemberGroupRepository memberGroupRepository;
 
-    public void login(String accessToken) {
+    public MemberDto login(String accessToken) {
         JsonNode userResourceNode = getUserResource(accessToken);
-
-        System.out.println("userResourceNode = " + userResourceNode);
 
         String id = userResourceNode.get("id").asText();
         String email = userResourceNode.get("email").asText();
         String name = userResourceNode.get("name").asText();
 
-        memberRepository.save(Member.from(id, name, email));
+        Member member = memberRepository.findByEmail(email);
+        if(member == null){
+            Member newMember = Member.builder()
+                    .email(email)
+                    .googleId(id)
+                    .name(name)
+                    .build();
+            memberRepository.save(newMember);
+            member = newMember;
+        }
+        return MemberDto.from(member.getName(), member.getEmail());
     }
 
     private JsonNode getUserResource(String accessToken) {
@@ -63,30 +62,7 @@ public class MemberService {
                 .collect(Collectors.toList());
     }
 
-
     public void deleteMember(Long memberId) {
         memberRepository.deleteById(memberId);
     }
-
-    public void addMember(MemberDto memberDto) {
-        Member member = memberRepository.findByEmail(memberDto.getEmail());
-        if (member == null) {
-            throw new MemberNotFoundException();
-        }
-        GroupC group = groupRepository.findByGroupId(memberDto.getGroupId());
-        if (group == null) {
-            throw new GroupNotFoundException();
-        }
-        MemberGroup memberGroup = memberGroupRepository.findByMemberAndGroupC(member, group);
-        if(memberGroup != null){
-            throw new DuplicateMemberGroupException();
-        }
-        MemberGroup newMemberGroup = MemberGroup.builder()
-                .member(member)
-                .groupC(group)
-                .position(memberDto.getPosition())
-                .build();
-        memberGroupRepository.save(newMemberGroup);
-    }
-
 }

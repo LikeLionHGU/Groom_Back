@@ -8,5 +8,4 @@ import lombok.NoArgsConstructor;
 
 public class FolderUpdateRequest {
     private String folderName;
-    private String path;
 }
