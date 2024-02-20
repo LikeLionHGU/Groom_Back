@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Data
-public class GroupCreateRequest {
-    private Long memberId;
+public class GroupUpdateRequest {
     private String groupName;
-    private String position;
 }
