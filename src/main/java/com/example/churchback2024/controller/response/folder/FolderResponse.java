@@ -1,4 +1,4 @@
-package com.example.churchback2024.controller.response.Folder;
+package com.example.churchback2024.controller.response.folder;
 
 
 import com.example.churchback2024.domain.Folder;
@@ -13,11 +13,12 @@ import lombok.NoArgsConstructor;
 public class FolderResponse {
     private String folderName;
     private String path;
+    private String memberName;
+    private String  groupName;
     public FolderResponse(Folder folder) {
         this.folderName = folder.getFolderName();
         this.path = folder.getPath();
+        this.memberName = folder.getMemberGroup().getMember().getName();
+        this.groupName = folder.getMemberGroup().getGroupC().getGroupName();
     }
-
-
-
 }

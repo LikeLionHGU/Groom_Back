@@ -1,4 +1,4 @@
-package com.example.churchback2024.controller.response.Folder;
+package com.example.churchback2024.controller.response.folder;
 
 
 import lombok.Getter;

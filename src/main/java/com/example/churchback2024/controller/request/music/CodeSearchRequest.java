@@ -7,11 +7,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Data
-public class MusicCreateRequest {
-    private String musicName;
+public class CodeSearchRequest {
     private String code;
-    private String link;
-    private String description;
-    private String path;
-    private String groupName;
 }
