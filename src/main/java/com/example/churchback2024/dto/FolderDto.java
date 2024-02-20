@@ -2,7 +2,7 @@ package com.example.churchback2024.dto;
 
 import com.example.churchback2024.controller.request.Folder.FolderCreateRequest;
 import com.example.churchback2024.controller.request.Folder.FolderUpdateRequest;
-import com.example.churchback2024.domain.MemberGroup;
+import com.example.churchback2024.domain.Folder;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,13 +28,18 @@ public class FolderDto {
                 .groupId(request.getGroupId())
                 .build();
     }
-
     public static FolderDto from(FolderUpdateRequest request) {
         return FolderDto.builder()
                 .folderName(request.getFolderName())
-                .path(request.getPath())
                 .build();
     }
-
-
+    public static FolderDto from(Folder folder) {
+        return FolderDto.builder()
+                .folderId(folder.getFolderId())
+                .folderName(folder.getFolderName())
+                .path(folder.getPath())
+                .memberId(folder.getMemberGroup().getMember().getMemberId())
+                .groupId(folder.getMemberGroup().getGroupC().getGroupId())
+                .build();
+    }
 }
