@@ -9,7 +9,6 @@ import java.util.List;
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 public class MusicListResponse {
     private List<MusicResponse> musics;
-
     public MusicListResponse(List<MusicResponse> musics) {
         this.musics = musics;
     }

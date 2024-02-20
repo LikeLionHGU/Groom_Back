@@ -13,26 +13,22 @@ public class MusicResponse {
     private String code;
     private String link;
     private String description;
-    private String path;
     private Long folderId;
-    private String groupName;
-
-    public MusicResponse(Music music) {
+    private String musicImageUrl;
+    public MusicResponse(Music music, String url) {
         this.musicName = music.getMusicName();
         this.code = music.getCode();
         this.link = music.getLink();
         this.description = music.getDescription();
-        this.path = music.getPath();
         this.folderId = music.getFolder().getFolderId();
+        this.musicImageUrl = url;
     }
 
-    public MusicResponse(MusicDto musicDto) {
+    public MusicResponse (MusicDto musicDto) {
         this.musicName = musicDto.getMusicName();
         this.code = musicDto.getCode();
         this.link = musicDto.getLink();
         this.description = musicDto.getDescription();
-        this.path = musicDto.getPath();
-//        this.folderId = musicDto.getFolderId();
+        this.musicImageUrl = musicDto.getMusicImageUrl();
     }
-
 }

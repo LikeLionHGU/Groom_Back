@@ -12,6 +12,5 @@ public class MusicCreateRequest {
     private String code;
     private String link;
     private String description;
-    private String path;
-    private String groupName;
+    private Long folderId;
 }

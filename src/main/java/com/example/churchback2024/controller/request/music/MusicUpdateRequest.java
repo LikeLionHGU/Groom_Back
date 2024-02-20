@@ -8,13 +8,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class MusicUpdateRequest {
-//    private Long musicId;
     private String musicName;
     private String code;
     private String link;
     private String description;
-    private String musicImage;
-    private String path;
+    private String musicImageUrl;
+    private Long folderId;
   }
 
 

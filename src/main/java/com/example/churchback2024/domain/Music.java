@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
 
 @Entity
 @Getter
@@ -17,27 +16,22 @@ public class Music extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long musicId;
-
-//    @Column(nullable = false, unique = true)
     private String musicName;
-//    @Column(nullable = false)
     private String code;
     private String link;
     private String description;
-    private String path;
+    private String musicImageUrl;
 
     @ManyToOne
     @JoinColumn(name = "folderId")
     private Folder folder;
 
-    // BaseEntity 에 regDate,modDate 는 상속
-
-    public void update(MusicDto musicDto) {
+    public void update(MusicDto musicDto, String url) {
         this.musicName = musicDto.getMusicName();
         this.code = musicDto.getCode();
         this.link = musicDto.getLink();
         this.description = musicDto.getDescription();
-        this.path = musicDto.getPath();
+        this.musicImageUrl = url;
     }
 
     public static Music from(MusicDto musicDto) {
@@ -46,16 +40,16 @@ public class Music extends BaseEntity {
                 .code(musicDto.getCode())
                 .link(musicDto.getLink())
                 .description(musicDto.getDescription())
-                .path(musicDto.getPath())
+                .musicImageUrl(musicDto.getMusicImageUrl())
                 .build();
     }
-    public static Music from(MusicDto musicDto, Folder folder) {
+    public static Music from(MusicDto musicDto, Folder folder, String musicImageUrl) {
         return Music.builder()
                 .musicName(musicDto.getMusicName())
                 .code(musicDto.getCode())
                 .link(musicDto.getLink())
                 .description(musicDto.getDescription())
-                .path(musicDto.getPath())
+                .musicImageUrl(musicImageUrl)
                 .folder(folder)
                 .build();
     }
