@@ -13,9 +13,9 @@ public class MusicResponse {
     private String code;
     private String link;
     private String description;
-
     private String path;
     private Long folderId;
+    private String groupName;
 
     public MusicResponse(Music music) {
         this.musicName = music.getMusicName();

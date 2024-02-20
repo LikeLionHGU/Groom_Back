@@ -7,4 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MemberGroupRepository extends JpaRepository<MemberGroup, Long> {
     MemberGroup findByMemberAndGroupC(Member member, GroupC groupC);
+
+    MemberGroup findByMemberGroupId(Long memberGroupId);
+    MemberGroup findByMember_MemberIdAndGroupC_GroupId(Long memberId, Long groupId);
 }

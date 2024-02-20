@@ -23,15 +23,20 @@ public class Folder extends BaseEntity {
     @Column(nullable = false)
     private String path;
 
+    @ManyToOne
+    @JoinColumn(name = "memberGroupId")
+    private MemberGroup memberGroup;
+
     public void update(FolderDto FolderDto) {
         this.folderName = FolderDto.getFolderName();
         this.path = FolderDto.getPath();
     } // 새로운 값으로 변경
 
-    public static Folder from(FolderDto folderDto) {
+    public static Folder from(FolderDto folderDto, MemberGroup memberGroup) {
         return Folder.builder()
                 .folderName(folderDto.getFolderName())
                 .path(folderDto.getPath())
+                .memberGroup(memberGroup)
                 .build();
-    } //새로운 Folder 객체생성
-} //완성
+    }
+}
