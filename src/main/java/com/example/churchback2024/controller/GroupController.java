@@ -1,5 +1,6 @@
 package com.example.churchback2024.controller;
 
+import com.example.churchback2024.controller.request.group.GroupAddRequest;
 import com.example.churchback2024.controller.request.group.GroupCreateRequest;
 import com.example.churchback2024.controller.request.group.GroupUpdateRequest;
 import com.example.churchback2024.controller.response.group.GroupListResponse;
@@ -30,6 +31,12 @@ public class GroupController {
         return ResponseEntity.ok(groupResponse);
     }
 
+    @PostMapping("/add")
+    public ResponseEntity<GroupResponse> addGroup(@RequestBody GroupAddRequest request){
+        GroupDto groupDto = groupService.addGroup(GroupDto.from(request));
+        GroupResponse groupResponse = new GroupResponse(groupDto);
+        return ResponseEntity.ok(groupResponse);
+    }
     @PatchMapping("/{groupId}")
     public ResponseEntity<GroupResponse> updateGroup(@PathVariable Long groupId, @RequestBody GroupUpdateRequest request){
         return ResponseEntity.ok(groupService.updateGroup(groupId, GroupDto.from(request)));

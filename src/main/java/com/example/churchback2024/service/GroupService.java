@@ -70,6 +70,24 @@ public class GroupService {
 //        groupRepository.save(GroupC.from(groupDto, invitationCode));
 //    }
 
+    public GroupDto addGroup(GroupDto groupDto) {
+        GroupC groupC = groupRepository.findByInvitationCode(groupDto.getInvitationCode());
+        if (groupC == null) {
+            throw new GroupNotFoundException();
+        }
+        Member member = memberRepository.findByMemberId(groupDto.getMemberId());
+        if (member == null) {
+            throw new MemberNotFoundException();
+        }
+        MemberGroup memberGroup = memberGroupRepository.findByMemberAndGroupC(member, groupC);
+        if (memberGroup != null) {
+            throw new DuplicateGroupException();
+        }
+        memberGroup = MemberGroup.from(member, groupC, groupDto.getPosition());
+        memberGroupRepository.save(memberGroup);
+        return GroupDto.from(memberGroup);
+
+    }
     public String generateRandomInvitationCode() {
         String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         StringBuilder sb = new StringBuilder();

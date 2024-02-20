@@ -1,5 +1,6 @@
 package com.example.churchback2024.dto;
 
+import com.example.churchback2024.controller.request.group.GroupAddRequest;
 import com.example.churchback2024.controller.request.group.GroupCreateRequest;
 import com.example.churchback2024.controller.request.group.GroupUpdateRequest;
 import com.example.churchback2024.domain.GroupC;
@@ -18,13 +19,20 @@ public class GroupDto {
     private String groupName;
     private Long memberId;
     private String position;
-
+    private String invitationCode;
 
     public static GroupDto from(GroupCreateRequest groupCreateRequest) {
         return GroupDto.builder()
                 .groupName(groupCreateRequest.getGroupName())
                 .memberId(groupCreateRequest.getMemberId())
                 .position(groupCreateRequest.getPosition())
+                .build();
+    }
+    public static GroupDto from(GroupAddRequest groupAddRequest) {
+        return GroupDto.builder()
+                .memberId(groupAddRequest.getMemberId())
+                .position(groupAddRequest.getPosition())
+                .invitationCode(groupAddRequest.getInvitationCode())
                 .build();
     }
     public static GroupDto from(GroupUpdateRequest groupUpdateRequest) {
