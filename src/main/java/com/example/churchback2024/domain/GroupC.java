@@ -20,6 +20,7 @@ public class GroupC extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long groupId;
     private String groupName;
+    private String invitationCode;
 
     public void update(GroupDto groupDto) {
         this.groupName = groupDto.getGroupName();
@@ -28,6 +29,13 @@ public class GroupC extends BaseEntity{
     public static GroupC from(GroupDto groupDto) {
         return GroupC.builder()
                 .groupName(groupDto.getGroupName())
+                .build();
+    }
+
+    public static GroupC from(GroupDto groupDto, String invitationCode) {
+        return GroupC.builder()
+                .groupName(groupDto.getGroupName())
+                .invitationCode(invitationCode)
                 .build();
     }
 }

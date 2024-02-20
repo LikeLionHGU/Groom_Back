@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +34,7 @@ public class GroupService {
         return new GroupListResponse(groupResponses);
     }
 
+// <<<<<<< yujin_feat/#28
     public GroupDto createGroup(GroupDto groupDto) {
         GroupC existingGroup = groupRepository.findByGroupName(groupDto.getGroupName());
         if (existingGroup != null) {
@@ -49,6 +51,31 @@ public class GroupService {
         MemberGroup memberGroup = MemberGroup.from(member, newGroup, groupDto.getPosition());
         memberGroupRepository.save(memberGroup);
         return GroupDto.from(newGroup);
+// =======
+    public void createGroup(GroupDto groupDto) {
+        GroupC groupC = groupRepository.findByGroupName(groupDto.getGroupName());
+        if (groupC != null) {
+            throw new DuplicateGroupException();
+        }
+        String invitationCode = generateRandomInvitationCode();
+        GroupC groupC1 = groupRepository.findByInvitationCode(invitationCode);
+        if (groupC1 != null) {
+            throw new RuntimeException("이미 존재하는 코드입니다.");
+        }
+        groupRepository.save(GroupC.from(groupDto, invitationCode));
+    }
+
+    public String generateRandomInvitationCode() {
+        String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        StringBuilder sb = new StringBuilder();
+        Random random = new Random();
+        int length = 6;
+
+        for (int i = 0; i < length; i++) {
+            sb.append(CHARACTERS.charAt(random.nextInt(CHARACTERS.length())));
+        }
+        return sb.toString();
+// >>>>>>> main
     }
 
     public GroupResponse updateGroup(Long groupId, GroupDto groupDto) {

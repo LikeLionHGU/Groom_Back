@@ -19,6 +19,7 @@ public class GroupDto {
     private Long memberId;
     private String position;
 
+
     public static GroupDto from(GroupCreateRequest groupCreateRequest) {
         return GroupDto.builder()
                 .groupName(groupCreateRequest.getGroupName())
