@@ -13,4 +13,5 @@ public class MusicCreateRequest {
     private String link;
     private String description;
     private String path;
+    private String groupName;
 }

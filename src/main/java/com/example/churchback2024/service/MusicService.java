@@ -6,6 +6,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.churchback2024.controller.response.music.MusicListResponse;
 import com.example.churchback2024.controller.response.music.MusicResponse;
 import com.example.churchback2024.domain.Folder;
+import com.example.churchback2024.domain.GroupC;
 import com.example.churchback2024.domain.Music;
 import com.example.churchback2024.dto.MusicDto;
 import com.example.churchback2024.exception.music.DuplicateMusicException;
@@ -80,17 +81,14 @@ public class MusicService {
     }
 
     public void createMusic(MusicDto musicDto, MultipartFile multipartFile, String dirName) throws IOException {
-        Music music = musicRepository.findByMusicName(musicDto.getMusicName());
-        Folder folder = folderRepository.findByPath(musicDto.getPath());
+//        Folder folder = folderRepository.findByPath(musicDto.getPath());
+        Folder folder = folderRepository.findByPathAndMemberGroup_GroupC_GroupName(musicDto.getPath(), musicDto.getGroupName());
         if(folder == null){
             throw new IllegalArgumentException("해당 경로의 폴더가 존재하지 않습니다.");
         }
         File uploadFile = convert(multipartFile).orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환 실패"));
         uploadFileToS3(uploadFile, dirName);
 
-//        if (music != null) {
-//            throw new DuplicateMusicException("해당 이름의 악보가 이미 존재합니다.");
-//        }
         musicRepository.save(Music.from(musicDto, folder));
     }
 
@@ -128,5 +126,19 @@ public class MusicService {
         musicRepository.deleteById(musicId);
     }
 
+    public MusicListResponse searchMusicByCode(String code) {
+        List<Music> musics = musicRepository.findByCodeContaining(code);
+        List<MusicResponse> musicResponses = musics.stream()
+                .map(MusicResponse::new)
+                .collect(Collectors.toList());
+        return new MusicListResponse(musicResponses);
+    }
+    public MusicListResponse searchMusicByMusicName(String musicName) {
+        List<Music> musics = musicRepository.findByMusicNameContaining(musicName);
+        List<MusicResponse> musicResponses = musics.stream()
+                .map(MusicResponse::new)
+                .collect(Collectors.toList());
+        return new MusicListResponse(musicResponses);
+    }
 
 }

@@ -20,6 +20,7 @@ public class MusicDto {
     private String description;
     private String musicImage;
     private String path;
+    private String groupName;
 
     public static MusicDto from(MusicCreateRequest request) {
         return MusicDto.builder()
@@ -28,6 +29,7 @@ public class MusicDto {
                 .link(request.getLink())
                 .description(request.getDescription())
                 .path(request.getPath())
+                .groupName(request.getGroupName())
                 .build();
     }
 
