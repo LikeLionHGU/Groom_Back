@@ -15,6 +15,7 @@ public class GroupDto {
     private Long groupId;
     private String groupName;
 
+
     public static GroupDto from(GroupCreateRequest groupCreateRequest) {
         return GroupDto.builder()
                 .groupName(groupCreateRequest.getGroupName())
