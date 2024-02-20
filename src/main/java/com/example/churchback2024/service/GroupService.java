@@ -34,7 +34,6 @@ public class GroupService {
         return new GroupListResponse(groupResponses);
     }
 
-// <<<<<<< yujin_feat/#28
     public GroupDto createGroup(GroupDto groupDto) {
         GroupC existingGroup = groupRepository.findByGroupName(groupDto.getGroupName());
         if (existingGroup != null) {
@@ -45,25 +44,31 @@ public class GroupService {
             throw new MemberNotFoundException();
         }
 
-        GroupC newGroup = GroupC.from(groupDto);
+        String invitationCode;
+        do {
+            invitationCode = generateRandomInvitationCode();
+        } while (groupRepository.findByInvitationCode(invitationCode) != null);
+
+        GroupC newGroup = GroupC.from(groupDto, invitationCode);
         groupRepository.save(newGroup);
 
         MemberGroup memberGroup = MemberGroup.from(member, newGroup, groupDto.getPosition());
         memberGroupRepository.save(memberGroup);
         return GroupDto.from(newGroup);
-// =======
-    public void createGroup(GroupDto groupDto) {
-        GroupC groupC = groupRepository.findByGroupName(groupDto.getGroupName());
-        if (groupC != null) {
-            throw new DuplicateGroupException();
-        }
-        String invitationCode = generateRandomInvitationCode();
-        GroupC groupC1 = groupRepository.findByInvitationCode(invitationCode);
-        if (groupC1 != null) {
-            throw new RuntimeException("이미 존재하는 코드입니다.");
-        }
-        groupRepository.save(GroupC.from(groupDto, invitationCode));
     }
+
+//    public void createGroup(GroupDto groupDto) {
+//        GroupC groupC = groupRepository.findByGroupName(groupDto.getGroupName());
+//        if (groupC != null) {
+//            throw new DuplicateGroupException();
+//        }
+//        String invitationCode = generateRandomInvitationCode();
+//        GroupC groupC1 = groupRepository.findByInvitationCode(invitationCode);
+//        if (groupC1 != null) {
+//            throw new RuntimeException("이미 존재하는 코드입니다.");
+//        }
+//        groupRepository.save(GroupC.from(groupDto, invitationCode));
+//    }
 
     public String generateRandomInvitationCode() {
         String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -75,7 +80,6 @@ public class GroupService {
             sb.append(CHARACTERS.charAt(random.nextInt(CHARACTERS.length())));
         }
         return sb.toString();
-// >>>>>>> main
     }
 
     public GroupResponse updateGroup(Long groupId, GroupDto groupDto) {
