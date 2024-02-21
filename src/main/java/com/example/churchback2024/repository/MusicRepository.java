@@ -11,9 +11,13 @@ import java.util.List;
 @Repository
 public interface MusicRepository extends JpaRepository<Music, Long> {
     Music findByMusicId(Long musicId);
-
-    List<Music> findByCodeContaining(String code);
-    List<Music> findByMusicNameContaining(String code);
+    Music findByMusicNameAndFolder_FolderId(String musicName, Long folderId);
+    @Query("SELECT m FROM Music m " +
+            "JOIN FETCH m.folder f " +
+            "JOIN FETCH f.memberGroup mg " +
+            "JOIN FETCH mg.groupC gc " +
+            "WHERE gc.groupId = :groupId")
+    List<Music> findByGroupContaining(@Param("groupId") Long groupId);
 
     @Query("SELECT m FROM Music m " +
             "JOIN FETCH m.folder f " +

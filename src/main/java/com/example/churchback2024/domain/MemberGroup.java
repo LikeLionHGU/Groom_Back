@@ -1,5 +1,6 @@
 package com.example.churchback2024.domain;
 
+import com.example.churchback2024.dto.GroupDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,12 +26,13 @@ public class MemberGroup extends BaseEntity{
     private GroupC groupC;
 
     private String position;
-
-    public static MemberGroup from(Member member, GroupC groupC, String position) {
+    private String nickname;
+    public static MemberGroup from(Member member, GroupC groupC, GroupDto groupDto){
         return MemberGroup.builder()
                 .member(member)
                 .groupC(groupC)
-                .position(position)
+                .position(groupDto.getPosition())
+                .nickname(groupDto.getNickname())
                 .build();
     }
 }

@@ -21,9 +21,9 @@ import java.io.IOException;
 public class MusicController {
     private final MusicService musicService;
 
-    @GetMapping("/list")
-    public ResponseEntity<MusicListResponse> findMusicList() {
-        MusicListResponse musicListResponse = musicService.getMusicList();
+    @GetMapping("/list/{groupId}")
+    public ResponseEntity<MusicListResponse> findMusicList(@PathVariable Long groupId) {
+        MusicListResponse musicListResponse = musicService.getMusicList(groupId);
         return ResponseEntity.ok(musicListResponse);
     }
     @GetMapping("/{musicId}")

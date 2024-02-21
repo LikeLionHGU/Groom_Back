@@ -52,23 +52,10 @@ public class GroupService {
         GroupC newGroup = GroupC.from(groupDto, invitationCode);
         groupRepository.save(newGroup);
 
-        MemberGroup memberGroup = MemberGroup.from(member, newGroup, groupDto.getPosition());
+        MemberGroup memberGroup = MemberGroup.from(member, newGroup, groupDto);
         memberGroupRepository.save(memberGroup);
         return GroupDto.from(newGroup);
     }
-
-//    public void createGroup(GroupDto groupDto) {
-//        GroupC groupC = groupRepository.findByGroupName(groupDto.getGroupName());
-//        if (groupC != null) {
-//            throw new DuplicateGroupException();
-//        }
-//        String invitationCode = generateRandomInvitationCode();
-//        GroupC groupC1 = groupRepository.findByInvitationCode(invitationCode);
-//        if (groupC1 != null) {
-//            throw new RuntimeException("이미 존재하는 코드입니다.");
-//        }
-//        groupRepository.save(GroupC.from(groupDto, invitationCode));
-//    }
 
     public GroupDto addGroup(GroupDto groupDto) {
         GroupC groupC = groupRepository.findByInvitationCode(groupDto.getInvitationCode());
@@ -83,7 +70,7 @@ public class GroupService {
         if (memberGroup != null) {
             throw new DuplicateGroupException();
         }
-        memberGroup = MemberGroup.from(member, groupC, groupDto.getPosition());
+        memberGroup = MemberGroup.from(member, groupC, groupDto);
         memberGroupRepository.save(memberGroup);
         return GroupDto.from(memberGroup);
 
