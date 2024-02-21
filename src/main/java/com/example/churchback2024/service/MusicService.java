@@ -81,7 +81,10 @@ public class MusicService {
     public MusicDto createMusic(MusicDto musicDto, MultipartFile multipartFile) throws IOException {
         Folder folder = folderRepository.findById(musicDto.getFolderId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 경로의 폴더가 존재하지 않습니다."));
-
+        Music existingMusic = musicRepository.findByMusicNameAndFolder_FolderId(musicDto.getMusicName(), folder.getFolderId());
+        if (existingMusic != null) {
+            throw new IllegalArgumentException("이미 같은 이름의 악보가 존재합니다.");
+        }
         if (multipartFile != null && !multipartFile.isEmpty()) {
             File uploadFile = convert(multipartFile)
                     .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환 실패"));
@@ -95,8 +98,8 @@ public class MusicService {
     }
 
 
-    public MusicListResponse getMusicList() {
-        List<Music> musics = musicRepository.findAll();
+    public MusicListResponse getMusicList(Long groupId) {
+        List<Music> musics = musicRepository.findByGroupContaining(groupId);
 
         List<MusicResponse> musicResponses = musics.stream()
                 .map(music -> new MusicResponse(music, generateImageUrl(music.getMusicImageUrl())))
