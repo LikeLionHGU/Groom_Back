@@ -11,4 +11,5 @@ public class GroupAddRequest {
     private Long memberId;
     private String invitationCode;
     private String position;
+    private String nickname;
 }

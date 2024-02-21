@@ -30,10 +30,11 @@ public class MemberDto {
                 .email(request.getEmail())
                 .build();
     }
-    public static MemberDto from(String name, String email) {
+    public static MemberDto from(String name, String email, Long memberId) {
         return MemberDto.builder()
                 .name(name)
                 .email(email)
+                .memberId(memberId)
                 .build();
     }
     public static MemberDto from(Member member) {
