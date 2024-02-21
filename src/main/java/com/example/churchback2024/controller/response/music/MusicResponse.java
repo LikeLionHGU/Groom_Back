@@ -15,6 +15,7 @@ public class MusicResponse {
     private String description;
     private Long folderId;
     private String musicImageUrl;
+    private Long musicId;
     public MusicResponse(Music music, String url) {
         this.musicName = music.getMusicName();
         this.code = music.getCode();
@@ -22,6 +23,7 @@ public class MusicResponse {
         this.description = music.getDescription();
         this.folderId = music.getFolder().getFolderId();
         this.musicImageUrl = url;
+        this.musicId = music.getMusicId();
     }
 
     public MusicResponse (MusicDto musicDto) {
@@ -30,5 +32,6 @@ public class MusicResponse {
         this.link = musicDto.getLink();
         this.description = musicDto.getDescription();
         this.musicImageUrl = musicDto.getMusicImageUrl();
+        this.musicId = musicDto.getMusicId();
     }
 }

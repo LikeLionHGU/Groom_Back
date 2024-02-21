@@ -36,6 +36,7 @@ public class GroupC extends BaseEntity{
         return GroupC.builder()
                 .groupName(groupDto.getGroupName())
                 .invitationCode(invitationCode)
+                .groupId(groupDto.getGroupId())
                 .build();
     }
 }

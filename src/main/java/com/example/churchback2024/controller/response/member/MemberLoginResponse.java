@@ -9,9 +9,11 @@ import lombok.NoArgsConstructor;
 public class MemberLoginResponse {
     private String name;
     private String email;
+    private Long memberId;
 
     public MemberLoginResponse(MemberDto memberDto) {
         this.name = memberDto.getName();
         this.email = memberDto.getEmail();
+        this.memberId = memberDto.getMemberId();
     }
 }

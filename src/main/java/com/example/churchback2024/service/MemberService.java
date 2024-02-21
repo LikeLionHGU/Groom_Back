@@ -43,7 +43,7 @@ public class MemberService {
             memberRepository.save(newMember);
             member = newMember;
         }
-        return MemberDto.from(member.getName(), member.getEmail());
+        return MemberDto.from(member.getName(), member.getEmail(), member.getMemberId());
     }
 
     private JsonNode getUserResource(String accessToken) {

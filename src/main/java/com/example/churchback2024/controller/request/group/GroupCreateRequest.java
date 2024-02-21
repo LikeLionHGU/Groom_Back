@@ -11,4 +11,5 @@ public class GroupCreateRequest {
     private Long memberId;
     private String groupName;
     private String position;
+    private String nickname;
 }

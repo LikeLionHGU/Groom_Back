@@ -18,6 +18,7 @@ public class GroupDto {
     private Long groupId;
     private String groupName;
     private Long memberId;
+    private String nickname;
     private String position;
     private String invitationCode;
 
@@ -26,6 +27,7 @@ public class GroupDto {
                 .groupName(groupCreateRequest.getGroupName())
                 .memberId(groupCreateRequest.getMemberId())
                 .position(groupCreateRequest.getPosition())
+                .nickname(groupCreateRequest.getNickname())
                 .build();
     }
     public static GroupDto from(GroupAddRequest groupAddRequest) {
@@ -33,6 +35,7 @@ public class GroupDto {
                 .memberId(groupAddRequest.getMemberId())
                 .position(groupAddRequest.getPosition())
                 .invitationCode(groupAddRequest.getInvitationCode())
+                .nickname(groupAddRequest.getNickname())
                 .build();
     }
     public static GroupDto from(GroupUpdateRequest groupUpdateRequest) {
