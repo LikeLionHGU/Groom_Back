@@ -35,7 +35,7 @@ public class Folder extends BaseEntity {
     public static Folder from(FolderDto folderDto, MemberGroup memberGroup) {
         return Folder.builder()
                 .folderName(folderDto.getFolderName())
-                .path(folderDto.getPath()+"-"+folderDto.getFolderName())
+                .path(folderDto.getPath())
                 .memberGroup(memberGroup)
                 .build();
     }
