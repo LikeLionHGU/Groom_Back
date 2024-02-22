@@ -106,6 +106,15 @@ public class MusicService {
                 .collect(Collectors.toList());
         return new MusicListResponse(musicResponses);
     }
+
+    public MusicListResponse getMusicListByPath(Long groupId, String path) {
+        List<Music> musics = musicRepository.findByGroupAndPathContaining(groupId, path);
+
+        List<MusicResponse> musicResponses = musics.stream()
+                .map(music -> new MusicResponse(music, generateImageUrl(music.getMusicImageUrl())))
+                .collect(Collectors.toList());
+        return new MusicListResponse(musicResponses);
+    }
     public MusicResponse getMusic(Long musicId) {
         Music music = musicRepository.findById(musicId).orElseThrow(MusicNotFoundException::new);
         return new MusicResponse(music, generateImageUrl(music.getMusicImageUrl()));
