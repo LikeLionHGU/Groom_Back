@@ -13,7 +13,7 @@ public class MusicUpdateRequest {
     private String link;
     private String description;
     private String musicImageUrl;
-    private Long folderId;
+    private String path;
   }
 
 

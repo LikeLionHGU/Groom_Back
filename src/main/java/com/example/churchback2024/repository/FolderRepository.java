@@ -11,7 +11,9 @@ import java.util.List;
 public interface FolderRepository extends JpaRepository<Folder, Long> {
     Folder findByFolderId(Long folderId);
     List<Folder> findByPath(String path);
-    List<Folder> findByPathAndMemberGroup_GroupC_GroupId(String path, Long groupId);
+    Folder findByPathAndMemberGroup_GroupC_GroupId(String path, Long groupId);
+
+    List<Folder> findAllByPathAndMemberGroup_GroupC_GroupId(String path, Long groupId);
     Folder findByFolderNameAndMemberGroup(String folderName, MemberGroup memberGroup);
     Folder findByPathAndMemberGroup_GroupC_GroupName(String path, String groupName);
 }
