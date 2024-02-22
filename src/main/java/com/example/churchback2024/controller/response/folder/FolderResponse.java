@@ -20,7 +20,7 @@ public class FolderResponse {
     public FolderResponse(Folder folder) {
         this.folderId = folder.getFolderId();
         this.folderName = folder.getFolderName();
-        this.path = folder.getPath();
+        this.path = extractPathBeforeDash(folder.getPath()); // 변경된 부분
         this.memberId = folder.getMemberGroup().getMember().getMemberId();
         this.groupId = folder.getMemberGroup().getGroupC().getGroupId();
     }
@@ -28,8 +28,14 @@ public class FolderResponse {
     public FolderResponse(FolderDto folderDto) {
         this.folderId = folderDto.getFolderId();
         this.folderName = folderDto.getFolderName();
-        this.path = folderDto.getPath();
+        this.path = extractPathBeforeDash(folderDto.getPath()); // 변경된 부분
         this.memberId = folderDto.getMemberId();
         this.groupId = folderDto.getGroupId();
+    }
+    private String extractPathBeforeDash(String path) {
+        if (path != null && path.contains("-")) {
+            return path.split("-")[0];
+        }
+        return path; // 구분자가 없는 경우 전체 경로 반환
     }
 }
