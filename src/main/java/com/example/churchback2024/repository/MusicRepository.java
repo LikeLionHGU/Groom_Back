@@ -32,4 +32,11 @@ public interface MusicRepository extends JpaRepository<Music, Long> {
             "JOIN FETCH mg.groupC gc " +
             "WHERE gc.groupId = :groupId AND m.musicName LIKE %:musicName%")
     List<Music> findByGroupAndMusicNameContaining(@Param("groupId") Long groupId, @Param("musicName") String musicName);
+
+    @Query("SELECT m FROM Music m " +
+            "JOIN FETCH m.folder f " +
+            "JOIN FETCH f.memberGroup mg " +
+            "JOIN FETCH mg.groupC gc " +
+            "WHERE gc.groupId = :groupId And f.path LIKE %:path%")
+    List<Music> findByGroupAndPathContaining(@Param("groupId") Long groupId, @Param("path") String path);
 }
