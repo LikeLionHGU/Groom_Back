@@ -20,7 +20,8 @@ public class MusicDto {
     private String link;
     private String description;
     private String musicImageUrl;
-    private Long folderId;
+    private String path;
+    private Long groupId;
 
     public static MusicDto from(MusicCreateRequest request) {
         return MusicDto.builder()
@@ -28,7 +29,8 @@ public class MusicDto {
                 .code(request.getCode())
                 .link(request.getLink())
                 .description(request.getDescription())
-                .folderId(request.getFolderId())
+                .path(request.getPath())
+                .groupId(request.getGroupId())
                 .build();
     }
 
@@ -59,7 +61,7 @@ public class MusicDto {
                 .link(request.getLink())
                 .description(request.getDescription())
                 .musicImageUrl(request.getMusicImageUrl())
-                .folderId(request.getFolderId())
+                .path(request.getPath())
                 .build();
     }
 }

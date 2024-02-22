@@ -61,7 +61,7 @@ public class FolderService {
         return new FolderListResponse(folderResponses);
     }
     public FolderListResponse getFolderByPathAndGroupId(String path, Long groupId) {
-        List<Folder> folders = folderRepository.findByPathAndMemberGroup_GroupC_GroupId(path, groupId);
+        List<Folder> folders = folderRepository.findAllByPathAndMemberGroup_GroupC_GroupId(path, groupId);
         if (folders.isEmpty()) {
             throw new FolderNotFoundException();
         }
