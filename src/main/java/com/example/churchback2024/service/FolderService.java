@@ -27,7 +27,9 @@ public class FolderService {
     public FolderDto createFolder(FolderDto folderDto) {
         MemberGroup memberGroup = memberGroupRepository.findByMember_MemberIdAndGroupC_GroupId(folderDto.getMemberId(), folderDto.getGroupId());
         if (memberGroup != null) {
-            Folder existingFolder = folderRepository.findByFolderNameAndMemberGroup(folderDto.getFolderName(), memberGroup);
+            Folder existingFolder = folderRepository.findByFolderNameAndPathAndMemberGroup_GroupC_GroupId(
+                    folderDto.getFolderName(), folderDto.getPath(), folderDto.getGroupId());
+
             if (existingFolder != null) {
                 throw new DuplicateFolderException();
             }
@@ -40,6 +42,9 @@ public class FolderService {
         }
     }
 
+
+
+
     public FolderListResponse getFolderList() {
         List<Folder> folders = folderRepository.findAll();
         List<FolderResponse> folderResponses = folders.stream()
@@ -49,7 +54,8 @@ public class FolderService {
     }
 
     public FolderListResponse getFolderByPath(String path) {
-        List<Folder> folders = folderRepository.findByPath(path);
+        String firstPartOfPath = path.split("-")[0];
+        List<Folder> folders = folderRepository.findByPath(firstPartOfPath);
         if (folders.isEmpty()) {
             throw new FolderNotFoundException();
         }
@@ -61,7 +67,8 @@ public class FolderService {
         return new FolderListResponse(folderResponses);
     }
     public FolderListResponse getFolderByPathAndGroupId(String path, Long groupId) {
-        List<Folder> folders = folderRepository.findAllByPathAndMemberGroup_GroupC_GroupId(path, groupId);
+        String firstPartOfPath = path.split("-")[0];
+        List<Folder> folders = folderRepository.findAllByPathAndMemberGroup_GroupC_GroupId(firstPartOfPath, groupId);
         if (folders.isEmpty()) {
             throw new FolderNotFoundException();
         }
@@ -83,6 +90,13 @@ public class FolderService {
     }
     public void deleteFolder(Long folderId) {
         folderRepository.deleteById(folderId);
+    }
+    private String extractPathBeforeDash(String path) {
+        System.out.println("path: " + path);
+        if (path != null && path.contains("-")) {
+            return path.split("-")[0];
+        }
+        return path; // 구분자가 없는 경우 전체 경로 반환
     }
 }
 
