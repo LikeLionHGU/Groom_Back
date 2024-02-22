@@ -5,6 +5,7 @@ import com.example.churchback2024.controller.request.group.GroupCreateRequest;
 import com.example.churchback2024.controller.request.group.GroupUpdateRequest;
 import com.example.churchback2024.controller.response.group.GroupListResponse;
 import com.example.churchback2024.controller.response.group.GroupResponse;
+import com.example.churchback2024.controller.response.member.MemberInfoResponse;
 import com.example.churchback2024.dto.GroupDto;
 import com.example.churchback2024.service.GroupService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,13 @@ public class GroupController {
     public ResponseEntity<GroupListResponse> getGroupList(){
         GroupListResponse groupListResponse = groupService.getGroupList();
         return ResponseEntity.ok(groupListResponse);
+    }
+
+    @GetMapping("/{groupId}/{memberId}")
+    public ResponseEntity<MemberInfoResponse> findInfoByMemberGroup(@PathVariable Long groupId, @PathVariable Long memberId){
+        GroupDto groupDto = groupService.getGroupInfo(groupId, memberId);
+        MemberInfoResponse memberInfoResponse = new MemberInfoResponse(groupDto);
+        return ResponseEntity.ok(memberInfoResponse);
     }
 
     @PostMapping("/create")

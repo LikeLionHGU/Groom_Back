@@ -55,6 +55,7 @@ public class GroupDto {
                 .groupName(memberGroup.getGroupC().getGroupName())
                 .memberId(memberGroup.getMember().getMemberId())
                 .position(memberGroup.getPosition())
+                .nickname(memberGroup.getNickname())
                 .build();
     }
 }
