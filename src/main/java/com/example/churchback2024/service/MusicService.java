@@ -8,6 +8,8 @@ import com.example.churchback2024.controller.response.music.MusicResponse;
 import com.example.churchback2024.domain.Folder;
 import com.example.churchback2024.domain.Music;
 import com.example.churchback2024.dto.MusicDto;
+import com.example.churchback2024.exception.folder.FolderNotFoundException;
+import com.example.churchback2024.exception.music.DuplicateMusicException;
 import com.example.churchback2024.exception.music.MusicNotFoundException;
 import com.example.churchback2024.repository.FolderRepository;
 import com.example.churchback2024.repository.MusicRepository;
@@ -79,10 +81,15 @@ public class MusicService {
     }
 
     public MusicDto createMusic(MusicDto musicDto, MultipartFile multipartFile) throws IOException {
+        System.out.println("musicDto.getPath(): " + musicDto.getPath());
+        System.out.println("musicDto.getGroupId(): " + musicDto.getGroupId());
         Folder folder = folderRepository.findByPathAndMemberGroup_GroupC_GroupId(musicDto.getPath(), musicDto.getGroupId());
         Music existingMusic = musicRepository.findByMusicNameAndFolder_FolderId(musicDto.getMusicName(), folder.getFolderId());
         if (existingMusic != null) {
-            throw new IllegalArgumentException("이미 같은 이름의 악보가 존재합니다.");
+            throw new DuplicateMusicException();
+        }
+        if(folder == null){
+            throw new FolderNotFoundException();
         }
         if (multipartFile != null && !multipartFile.isEmpty()) {
             File uploadFile = convert(multipartFile)
@@ -92,10 +99,8 @@ public class MusicService {
 
         Music music = Music.from(musicDto, folder, musicImageUrl);
         musicRepository.save(music);
-        String url = "https://" + bucket + ".s3." + region + ".amazonaws.com/" + musicImageUrl;
         return MusicDto.from(music, generateImageUrl(music.getMusicImageUrl()));
     }
-
 
     public MusicListResponse getMusicList(Long groupId) {
         List<Music> musics = musicRepository.findByGroupContaining(groupId);
@@ -107,13 +112,14 @@ public class MusicService {
     }
 
     public MusicListResponse getMusicListByPath(Long groupId, String path) {
-        List<Music> musics = musicRepository.findByGroupAndPathContaining(groupId, path);
+        List<Music> musics = musicRepository.findByFolderPathAndGroupC_GroupId(path, groupId);
 
         List<MusicResponse> musicResponses = musics.stream()
                 .map(music -> new MusicResponse(music, generateImageUrl(music.getMusicImageUrl())))
                 .collect(Collectors.toList());
         return new MusicListResponse(musicResponses);
     }
+
     public MusicResponse getMusic(Long musicId) {
         Music music = musicRepository.findById(musicId).orElseThrow(MusicNotFoundException::new);
         return new MusicResponse(music, generateImageUrl(music.getMusicImageUrl()));
