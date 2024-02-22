@@ -103,4 +103,11 @@ public class GroupService {
     public void deleteGroup(Long groupId) {
         groupRepository.deleteById(groupId);
     }
+
+    public GroupDto getGroupInfo(Long memberId, Long groupId) {
+        Member member = memberRepository.findById(memberId).orElseThrow();
+        GroupC group = groupRepository.findById(groupId).orElseThrow();
+        MemberGroup memberGroup = memberGroupRepository.findByMemberAndGroupC(member, group);
+        return GroupDto.from(memberGroup);
+    }
 }
