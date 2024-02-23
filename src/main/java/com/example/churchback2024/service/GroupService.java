@@ -104,7 +104,7 @@ public class GroupService {
         groupRepository.deleteById(groupId);
     }
 
-    public GroupDto getGroupInfo(Long memberId, Long groupId) {
+    public GroupDto getGroupInfo(Long groupId, Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow();
         GroupC group = groupRepository.findById(groupId).orElseThrow();
         MemberGroup memberGroup = memberGroupRepository.findByMemberAndGroupC(member, group);
