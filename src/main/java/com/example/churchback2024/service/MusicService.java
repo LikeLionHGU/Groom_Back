@@ -81,9 +81,8 @@ public class MusicService {
     }
 
     public MusicDto createMusic(MusicDto musicDto, MultipartFile multipartFile) throws IOException {
-        System.out.println("musicDto.getPath(): " + musicDto.getPath());
-        System.out.println("musicDto.getGroupId(): " + musicDto.getGroupId());
-        Folder folder = folderRepository.findByPathAndMemberGroup_GroupC_GroupId(musicDto.getPath(), musicDto.getGroupId());
+        Folder folder = folderRepository.findByPathAndGroup_GroupId(musicDto.getPath(), musicDto.getGroupId());
+
         Music existingMusic = musicRepository.findByMusicNameAndFolder_FolderId(musicDto.getMusicName(), folder.getFolderId());
         if (existingMusic != null) {
             throw new DuplicateMusicException();
@@ -94,9 +93,8 @@ public class MusicService {
         if (multipartFile != null && !multipartFile.isEmpty()) {
             File uploadFile = convert(multipartFile)
                     .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환 실패"));
-            musicImageUrl = uploadFileToS3(uploadFile, folder.getMemberGroup().getGroupC().getGroupName());
+            musicImageUrl = uploadFileToS3(uploadFile, folder.getGroup().getGroupName());
         }
-
         Music music = Music.from(musicDto, folder, musicImageUrl);
         musicRepository.save(music);
         return MusicDto.from(music, generateImageUrl(music.getMusicImageUrl()));
@@ -125,12 +123,12 @@ public class MusicService {
         return new MusicResponse(music, generateImageUrl(music.getMusicImageUrl()));
     }
     public MusicDto updateMusic(Long musicId, MusicDto musicDto, MultipartFile multipartFile) throws IOException {
-        Folder folder = folderRepository.findByPathAndMemberGroup_GroupC_GroupId(musicDto.getPath(), musicDto.getGroupId());
+        Folder folder = folderRepository.findByPathAndGroup_GroupId(musicDto.getPath(), musicDto.getGroupId());
         Music music = musicRepository.findById(musicId).orElseThrow(MusicNotFoundException::new);
         if (multipartFile != null && !multipartFile.isEmpty()) {
             File uploadFile = convert(multipartFile)
                     .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환 실패"));
-            musicImageUrl = uploadFileToS3(uploadFile, folder.getMemberGroup().getGroupC().getGroupName());
+            musicImageUrl = uploadFileToS3(uploadFile, folder.getGroup().getGroupName());
         }
         music.update(musicDto, musicImageUrl);
 

@@ -15,21 +15,18 @@ public class FolderResponse {
     private Long folderId;
     private String folderName;
     private String path;
-    private Long memberId;
     private Long  groupId;
     public FolderResponse(Folder folder) {
         this.folderId = folder.getFolderId();
         this.folderName = folder.getFolderName();
         this.path = folder.getPath();
-        this.memberId = folder.getMemberGroup().getMember().getMemberId();
-        this.groupId = folder.getMemberGroup().getGroupC().getGroupId();
+        this.groupId = folder.getGroup().getGroupId();
     }
 
     public FolderResponse(FolderDto folderDto) {
         this.folderId = folderDto.getFolderId();
         this.folderName = folderDto.getFolderName();
         this.path = folderDto.getPath();
-        this.memberId = folderDto.getMemberId();
         this.groupId = folderDto.getGroupId();
     }
 }

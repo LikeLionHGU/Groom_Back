@@ -10,6 +10,5 @@ import lombok.NoArgsConstructor;
 public class FolderCreateRequest {
     private String folderName;
     private String path;
-    private Long memberId;
     private Long groupId;
 }

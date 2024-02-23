@@ -17,14 +17,12 @@ public class FolderDto {
     private Long folderId;
     private String folderName;
     private String path;
-    private Long memberId;
     private Long groupId;
 
     public static FolderDto from(FolderCreateRequest request) {
         return FolderDto.builder()
                 .folderName(request.getFolderName())
                 .path(request.getPath())
-                .memberId(request.getMemberId())
                 .groupId(request.getGroupId())
                 .build();
     }
@@ -38,8 +36,7 @@ public class FolderDto {
                 .folderId(folder.getFolderId())
                 .folderName(folder.getFolderName())
                 .path(folder.getPath())
-                .memberId(folder.getMemberGroup().getMember().getMemberId())
-                .groupId(folder.getMemberGroup().getGroupC().getGroupId())
+                .groupId(folder.getGroup().getGroupId())
                 .build();
     }
 }
