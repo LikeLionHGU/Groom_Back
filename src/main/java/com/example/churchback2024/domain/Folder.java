@@ -16,7 +16,6 @@ public class Folder extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long folderId;
-
     @Column(nullable = false)
     private String folderName;
 
@@ -24,19 +23,19 @@ public class Folder extends BaseEntity {
     private String path;
 
     @ManyToOne
-    @JoinColumn(name = "memberGroupId")
-    private MemberGroup memberGroup;
+    @JoinColumn(name = "groupId")
+    private GroupC group;
+
 
     public void update(FolderDto FolderDto) {
         this.folderName = FolderDto.getFolderName();
 //        this.path = FolderDto.getPath();
     }
-
-    public static Folder from(FolderDto folderDto, MemberGroup memberGroup) {
+    public static Folder from(FolderDto folderDto, GroupC group) {
         return Folder.builder()
                 .folderName(folderDto.getFolderName())
                 .path(folderDto.getPath() + "-" + folderDto.getFolderName())
-                .memberGroup(memberGroup)
+                .group(group)
                 .build();
     }
 }
