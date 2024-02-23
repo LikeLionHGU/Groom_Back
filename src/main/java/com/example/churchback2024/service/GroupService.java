@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,14 +27,20 @@ public class GroupService {
     private final GroupRepository groupRepository;
     private final MemberRepository memberRepository;
     private final MemberGroupRepository memberGroupRepository;
-    public GroupListResponse getGroupList() {
-        List<GroupC> groupCS = groupRepository.findAll();
-        List<GroupResponse> groupResponses = groupCS.stream()
-                .map(GroupResponse::new)
-                .collect(java.util.stream.Collectors.toList());
-        return new GroupListResponse(groupResponses);
-    }
+//    public GroupListResponse getGroupList() {
+//        List<GroupC> groupCS = groupRepository.findAll();
+//        List<GroupResponse> groupResponses = groupCS.stream()
+//                .map(GroupResponse::new)
+//                .collect(java.util.stream.Collectors.toList());
+//        return new GroupListResponse(groupResponses);
+//    }
 
+    public List<GroupDto> getGroupList() {
+        List<GroupC> groups = groupRepository.findAll();
+        return  groups.stream()
+                .map(GroupDto::from)
+                .collect(Collectors.toList());
+    }
     public GroupDto createGroup(GroupDto groupDto) {
         GroupC existingGroup = groupRepository.findByGroupName(groupDto.getGroupName());
         if (existingGroup != null) {
@@ -109,5 +116,24 @@ public class GroupService {
         GroupC group = groupRepository.findById(groupId).orElseThrow();
         MemberGroup memberGroup = memberGroupRepository.findByMemberAndGroupC(member, group);
         return GroupDto.from(memberGroup);
+    }
+
+//    public GroupListResponse getGroupListByMemberId(Long memberId) {
+//        Member member = memberRepository.findById(memberId).orElseThrow();
+//        List<MemberGroup> memberGroups = memberGroupRepository.findByMember(member);
+//        List<GroupResponse> groupResponses = memberGroups.stream()
+//                .map(GroupResponse::new)
+//                .collect(java.util.stream.Collectors.toList());
+//        return new GroupListResponse(groupResponses);
+//    }
+    public List<GroupDto> getGroupListByMemberId(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow();
+        if(member == null) {
+            throw new MemberNotFoundException();
+        }
+        List<MemberGroup> memberGroups = memberGroupRepository.findByMember(member);
+        return memberGroups.stream()
+                .map(GroupDto::from)
+                .collect(Collectors.toList());
     }
 }

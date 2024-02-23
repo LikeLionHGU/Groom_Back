@@ -1,6 +1,7 @@
 package com.example.churchback2024.controller.response.group;
 
 import com.example.churchback2024.domain.GroupC;
+import com.example.churchback2024.domain.MemberGroup;
 import com.example.churchback2024.dto.GroupDto;
 import com.example.churchback2024.dto.MemberDto;
 import lombok.AccessLevel;
@@ -21,5 +22,10 @@ public class GroupResponse {
     public GroupResponse(GroupDto groupDto) {
         this.groupId = groupDto.getGroupId();
         this.groupName = groupDto.getGroupName();
+    }
+
+    public GroupResponse(MemberGroup memberGroup) {
+        this.groupId = memberGroup.getGroupC().getGroupId();
+        this.groupName = memberGroup.getGroupC().getGroupName();
     }
 }

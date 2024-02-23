@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin("*")
@@ -21,7 +23,15 @@ public class GroupController {
 
     @GetMapping("/list")
     public ResponseEntity<GroupListResponse> getGroupList(){
-        GroupListResponse groupListResponse = groupService.getGroupList();
+        List<GroupDto> dtoList = groupService.getGroupList();
+        GroupListResponse groupListResponse = new GroupListResponse(dtoList);
+        return ResponseEntity.ok(groupListResponse);
+    }
+
+    @GetMapping("/list/{memberId}")
+    public ResponseEntity<GroupListResponse> getGroupListAddMember(@PathVariable Long memberId){
+        List<GroupDto> dtoList = groupService.getGroupListByMemberId(memberId);
+        GroupListResponse groupListResponse = new GroupListResponse(dtoList);
         return ResponseEntity.ok(groupListResponse);
     }
 
