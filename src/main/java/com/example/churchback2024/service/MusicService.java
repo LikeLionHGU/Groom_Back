@@ -123,7 +123,9 @@ public class MusicService {
         return new MusicResponse(music, generateImageUrl(music.getMusicImageUrl()));
     }
     public MusicDto updateMusic(Long musicId, MusicDto musicDto, MultipartFile multipartFile) throws IOException {
-        Folder folder = folderRepository.findByPathAndGroup_GroupId(musicDto.getPath(), musicDto.getGroupId());
+//        Folder folder = folderRepository.findByPathAndGroup_GroupId(musicDto.getPath(), musicDto.getGroupId());
+//        Folder folder = folderRepository.findByFolderIdAndGroup_GroupId(musicDto.getFolderId(), musicDto.getGroupId());
+        Folder folder = folderRepository.findByFolderId(musicDto.getFolderId());
         Music music = musicRepository.findById(musicId).orElseThrow(MusicNotFoundException::new);
         if (multipartFile != null && !multipartFile.isEmpty()) {
             File uploadFile = convert(multipartFile)

@@ -22,6 +22,7 @@ public class MusicDto {
     private String musicImageUrl;
     private String path;
     private Long groupId;
+    private Long folderId;
 
     public static MusicDto from(MusicCreateRequest request) {
         return MusicDto.builder()
@@ -61,7 +62,7 @@ public class MusicDto {
                 .link(request.getLink())
                 .description(request.getDescription())
                 .musicImageUrl(request.getMusicImageUrl())
-                .path(request.getPath())
+                .folderId(request.getFolderId())
                 .build();
     }
 }
