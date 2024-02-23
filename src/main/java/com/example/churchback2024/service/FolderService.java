@@ -101,4 +101,12 @@ public class FolderService {
         }
         return path;
     }
+
+    public FolderDto getFolderId(Long groupId, String folderName) {
+        Folder folder = folderRepository.findByGroup_GroupIdAndFolderName(groupId, folderName);
+        if (folder == null) {
+            throw new FolderNotFoundException();
+        }
+        return FolderDto.from(folder);
+    }
 }

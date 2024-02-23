@@ -2,6 +2,7 @@ package com.example.churchback2024.controller;
 
 import com.example.churchback2024.controller.request.Folder.FolderCreateRequest;
 import com.example.churchback2024.controller.request.Folder.FolderUpdateRequest;
+import com.example.churchback2024.controller.response.folder.FolderIdResponse;
 import com.example.churchback2024.controller.response.folder.FolderListResponse;
 import com.example.churchback2024.controller.response.folder.FolderResponse;
 import com.example.churchback2024.dto.FolderDto;
@@ -22,6 +23,12 @@ public class FolderController {
     public ResponseEntity<FolderListResponse> findFolderList(){
         FolderListResponse FolderListResponse = folderService.getFolderList();
         return ResponseEntity.ok(FolderListResponse);
+    }
+    @GetMapping("{groupId}/{folderName}")
+    public ResponseEntity<FolderIdResponse> findFolderId(@PathVariable Long groupId, @PathVariable String folderName){
+        FolderDto folderDto = folderService.getFolderId(groupId, folderName);
+        FolderIdResponse folderIdResponse = new FolderIdResponse(folderDto);
+        return ResponseEntity.ok(folderIdResponse);
     }
 
     @PostMapping("/create")
