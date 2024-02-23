@@ -29,6 +29,7 @@ public class FolderDto {
     public static FolderDto from(FolderUpdateRequest request) {
         return FolderDto.builder()
                 .folderName(request.getFolderName())
+                .path(request.getPath())
                 .build();
     }
     public static FolderDto from(Folder folder) {

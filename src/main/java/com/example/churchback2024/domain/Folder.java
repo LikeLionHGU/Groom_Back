@@ -27,9 +27,9 @@ public class Folder extends BaseEntity {
     private GroupC group;
 
 
-    public void update(FolderDto FolderDto) {
-        this.folderName = FolderDto.getFolderName();
-//        this.path = FolderDto.getPath();
+    public void update(FolderDto folderDto) {
+        this.folderName = folderDto.getFolderName();
+        this.path = folderDto.getPath() + "-" + folderDto.getFolderName();
     }
     public static Folder from(FolderDto folderDto, GroupC group) {
         return Folder.builder()
