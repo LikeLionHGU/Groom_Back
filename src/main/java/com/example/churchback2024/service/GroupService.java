@@ -1,6 +1,5 @@
 package com.example.churchback2024.service;
 
-import com.example.churchback2024.controller.response.group.GroupListResponse;
 import com.example.churchback2024.controller.response.group.GroupResponse;
 import com.example.churchback2024.domain.GroupC;
 import com.example.churchback2024.domain.Member;
@@ -27,13 +26,6 @@ public class GroupService {
     private final GroupRepository groupRepository;
     private final MemberRepository memberRepository;
     private final MemberGroupRepository memberGroupRepository;
-//    public GroupListResponse getGroupList() {
-//        List<GroupC> groupCS = groupRepository.findAll();
-//        List<GroupResponse> groupResponses = groupCS.stream()
-//                .map(GroupResponse::new)
-//                .collect(java.util.stream.Collectors.toList());
-//        return new GroupListResponse(groupResponses);
-//    }
 
     public List<GroupDto> getGroupList() {
         List<GroupC> groups = groupRepository.findAll();
@@ -64,24 +56,32 @@ public class GroupService {
         return GroupDto.from(newGroup);
     }
 
-    public GroupDto addGroup(GroupDto groupDto) {
-        GroupC groupC = groupRepository.findByInvitationCode(groupDto.getInvitationCode());
-        if (groupC == null) {
-            throw new GroupNotFoundException();
-        }
-        Member member = memberRepository.findByMemberId(groupDto.getMemberId());
-        if (member == null) {
-            throw new MemberNotFoundException();
-        }
-        MemberGroup memberGroup = memberGroupRepository.findByMemberAndGroupC(member, groupC);
-        if (memberGroup != null) {
-            throw new DuplicateGroupException();
-        }
-        memberGroup = MemberGroup.from(member, groupC, groupDto);
-        memberGroupRepository.save(memberGroup);
-        return GroupDto.from(memberGroup);
-
+public GroupDto addGroup(GroupDto groupDto) {
+    Member member = memberRepository.findByMemberId(groupDto.getMemberId());
+    if (member == null) {
+        throw new MemberNotFoundException();
     }
+
+    List<MemberGroup> memberGroups = memberGroupRepository.findByMember(member);
+    if (memberGroups.size() >= 3) {
+        throw new IllegalStateException("멤버는 최대 3개의 그룹에만 가입할 수 있습니다.");
+    }
+
+    GroupC groupC = groupRepository.findByInvitationCode(groupDto.getInvitationCode());
+    if (groupC == null) {
+        throw new GroupNotFoundException();
+    }
+
+    MemberGroup memberGroup = memberGroupRepository.findByMemberAndGroupC(member, groupC);
+    if (memberGroup != null) {
+        throw new DuplicateGroupException();
+    }
+
+    memberGroup = MemberGroup.from(member, groupC, groupDto);
+    memberGroupRepository.save(memberGroup);
+
+    return GroupDto.from(memberGroup);
+}
     public String generateRandomInvitationCode() {
         String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         StringBuilder sb = new StringBuilder();
@@ -118,14 +118,6 @@ public class GroupService {
         return GroupDto.from(memberGroup);
     }
 
-//    public GroupListResponse getGroupListByMemberId(Long memberId) {
-//        Member member = memberRepository.findById(memberId).orElseThrow();
-//        List<MemberGroup> memberGroups = memberGroupRepository.findByMember(member);
-//        List<GroupResponse> groupResponses = memberGroups.stream()
-//                .map(GroupResponse::new)
-//                .collect(java.util.stream.Collectors.toList());
-//        return new GroupListResponse(groupResponses);
-//    }
     public List<GroupDto> getGroupListByMemberId(Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow();
         if(member == null) {
