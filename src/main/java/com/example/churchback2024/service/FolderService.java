@@ -26,25 +26,6 @@ public class FolderService {
     private final FolderRepository folderRepository;
     private final MemberGroupRepository memberGroupRepository;
     private final GroupRepository groupRepository;
-
-//    public FolderDto createFolder(FolderDto folderDto) {
-//        MemberGroup memberGroup = memberGroupRepository.findByMember_MemberIdAndGroupC_GroupId(folderDto.getMemberId(), folderDto.getGroupId());
-//        if (memberGroup != null) {
-//            Folder existingFolder = folderRepository.findByFolderNameAndPathAndMemberGroup_GroupC_GroupId(
-//                    folderDto.getFolderName(), folderDto.getPath(), folderDto.getGroupId());
-//
-//            if (existingFolder != null) {
-//                throw new DuplicateFolderException();
-//            }
-//
-//            Folder newFolder = Folder.from(folderDto, memberGroup);
-//            folderRepository.save(newFolder);
-//            return FolderDto.from(newFolder);
-//        } else {
-//            throw new MemberGroupNotFoundException();
-//        }
-//    }
-
     public FolderDto createFolder(FolderDto folderDto) {
         GroupC group = groupRepository.findByGroupId(folderDto.getGroupId());
         System.out.println(group.getGroupId());
