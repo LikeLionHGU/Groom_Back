@@ -69,7 +69,7 @@ public class FolderService {
 
         return new FolderListResponse(folderResponses);
     }
-    public FolderListResponse getFolderByPathAndGroupId(String path, Long groupId) {
+    public FolderListResponse getFolderByPathAndGroupId(Long groupId, String path) {
         String firstPartOfPath = path.split("-")[0];
         List<Folder> folders = folderRepository.findAllByPathAndGroup_GroupId(firstPartOfPath, groupId);
         if (folders.isEmpty()) {

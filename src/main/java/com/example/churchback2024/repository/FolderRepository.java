@@ -15,7 +15,7 @@ public interface FolderRepository extends JpaRepository<Folder, Long> {
     @Query(value = "SELECT * FROM folder WHERE SUBSTRING_INDEX(path, '-', 1) = ?1", nativeQuery = true)
     List<Folder> findByPath(String path);
     Folder findByPathAndGroup_GroupId(String path, Long groupId);
-    @Query(value = "SELECT * FROM folder WHERE SUBSTRING_INDEX(path, '-', 1) = ?1", nativeQuery = true)
+    @Query(value = "SELECT * FROM folder WHERE SUBSTRING_INDEX(path, '-', 1) = ?1 AND group_id = ?2", nativeQuery = true)
     List<Folder> findAllByPathAndGroup_GroupId(String path, Long groupId);
     Folder findByFolderNameAndPathAndGroup_GroupId(String folderName, String path, Long groupId);
 }

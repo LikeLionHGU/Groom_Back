@@ -47,7 +47,7 @@ public class FolderController {
     }
     @GetMapping("/list/{groupId}/{path}")
     public ResponseEntity<FolderListResponse> getFolderByPathAndGroupId(@PathVariable Long groupId, @PathVariable String path) {
-        FolderListResponse folderListResponse = folderService.getFolderByPathAndGroupId(path, groupId);
+        FolderListResponse folderListResponse = folderService.getFolderByPathAndGroupId(groupId, path);
         return ResponseEntity.ok(folderListResponse);
     }
 }
