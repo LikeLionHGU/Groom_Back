@@ -61,7 +61,7 @@ public class MusicDto {
                 .code(request.getCode())
                 .link(request.getLink())
                 .description(request.getDescription())
-                .musicImageUrl(request.getMusicImageUrl())
+//                .musicImageUrl(request.getMusicImageUrl())
                 .folderId(request.getFolderId())
                 .build();
     }
