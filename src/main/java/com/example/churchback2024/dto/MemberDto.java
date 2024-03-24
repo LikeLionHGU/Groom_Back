@@ -1,5 +1,7 @@
 package com.example.churchback2024.dto;
 
+import com.example.churchback2024.controller.request.member.KaKaoMemberAddRequest;
+import com.example.churchback2024.controller.request.member.KaKaoMemberSignUpRequest;
 import com.example.churchback2024.controller.request.member.MemberAddRequest;
 import com.example.churchback2024.controller.request.member.MemberSignUpRequest;
 import com.example.churchback2024.domain.Member;
@@ -42,6 +44,22 @@ public class MemberDto {
                 .name(member.getName())
                 .email(member.getEmail())
                 .g_id(member.getGoogleId())
+                .build();
+    }
+
+    public static MemberDto from(KaKaoMemberSignUpRequest request) {
+        return MemberDto.builder()
+                .name(request.getNickname())
+                .build();
+    }
+    public static MemberDto from(KaKaoMemberAddRequest request) {
+        return MemberDto.builder()
+                .name(request.getNickname())
+                .build();
+    }
+    public static MemberDto from(String name) {
+        return MemberDto.builder()
+                .name(name)
                 .build();
     }
 }
