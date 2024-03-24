@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface MemberRepository extends JpaRepository<Member, Long> {
     Member findByEmail(String email);
     Member findByMemberId(Long memberId);
+
+    Member findByName(String nickname);
 }

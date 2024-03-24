@@ -1,5 +1,6 @@
 package com.example.churchback2024.controller;
 
+import com.example.churchback2024.controller.response.member.KaKaoMemberLoginResponse;
 import com.example.churchback2024.controller.response.member.MemberListResponse;
 import com.example.churchback2024.controller.response.member.MemberLoginResponse;
 import com.example.churchback2024.dto.MemberDto;
@@ -23,6 +24,21 @@ public class MemberController {
         MemberLoginResponse memberLoginResponse = new MemberLoginResponse(memberDto);
         return ResponseEntity.ok(memberLoginResponse);
     }
+
+    @GetMapping("/kakao/callback")
+    public void kakaoCallback(@RequestParam String code) {
+        String accessToken = memberService.getKakaoAccessToken(code);
+        System.out.println(accessToken);
+    }
+
+    @PostMapping("/kakao/callback")
+    public ResponseEntity<KaKaoMemberLoginResponse> kakaoLogin(@RequestHeader("Authorization") String authorizationHeader){
+        String accessToken = authorizationHeader.substring("Bearer ".length());
+        MemberDto memberDto = memberService.kakaoLogin(accessToken);
+        KaKaoMemberLoginResponse kaKaoMemberLoginResponse = new KaKaoMemberLoginResponse(memberDto);
+        return ResponseEntity.ok(kaKaoMemberLoginResponse);
+    }
+
     @GetMapping("/list")
     public ResponseEntity<MemberListResponse> findMemberList(){
         List<MemberDto> dtoList = memberService.getMemberList();
