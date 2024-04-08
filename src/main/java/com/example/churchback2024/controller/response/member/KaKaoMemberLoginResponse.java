@@ -8,8 +8,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 public class KaKaoMemberLoginResponse {
     private String nickname;
+    private String email;
 
     public KaKaoMemberLoginResponse(MemberDto dto) {
         this.nickname = dto.getName();
+        this.email = dto.getEmail();
     }
 }
