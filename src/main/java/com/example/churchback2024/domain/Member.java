@@ -18,10 +18,8 @@ public class Member extends BaseEntity{
     private String name;
     @Column(nullable = false, unique = true)
     private String email;
-    private String googleId;
-    public static Member from(String id, String name, String email) {
+    public static Member from(String name, String email) {
         return Member.builder()
-                .googleId(id)
                 .name(name)
                 .email(email)
                 .build();

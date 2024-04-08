@@ -18,7 +18,6 @@ public class MemberDto {
     private String name;
     private String email;
     private Long memberId;
-    private String g_id;
     private Long groupId;
 
     public static MemberDto from(MemberSignUpRequest request){
@@ -43,23 +42,25 @@ public class MemberDto {
         return MemberDto.builder()
                 .name(member.getName())
                 .email(member.getEmail())
-                .g_id(member.getGoogleId())
                 .build();
     }
 
     public static MemberDto from(KaKaoMemberSignUpRequest request) {
         return MemberDto.builder()
                 .name(request.getNickname())
+                .email(request.getEmail())
                 .build();
     }
     public static MemberDto from(KaKaoMemberAddRequest request) {
         return MemberDto.builder()
                 .name(request.getNickname())
+                .email(request.getEmail())
                 .build();
     }
-    public static MemberDto from(String name) {
+    public static MemberDto from(String name, String email) {
         return MemberDto.builder()
                 .name(name)
+                .email(email)
                 .build();
     }
 }

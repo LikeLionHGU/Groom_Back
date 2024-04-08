@@ -40,7 +40,6 @@ public class MemberService {
     public MemberDto login(String accessToken) {
         JsonNode userResourceNode = getUserResource(accessToken, googleResourceUri);
 
-        String id = userResourceNode.get("id").asText();
         String email = userResourceNode.get("email").asText();
         String name = userResourceNode.get("name").asText();
 
@@ -48,7 +47,6 @@ public class MemberService {
         if(member == null){
             Member newMember = Member.builder()
                     .email(email)
-                    .googleId(id)
                     .name(name)
                     .build();
             memberRepository.save(newMember);
@@ -78,11 +76,6 @@ public class MemberService {
             bw.write(sb.toString());
             bw.flush();
 
-            //결과 코드가 200이라면 성공
-            int responseCode = conn.getResponseCode();
-            System.out.println("responseCode : " + responseCode);
-
-            //요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String line = "";
             String result = "";
@@ -92,7 +85,6 @@ public class MemberService {
             }
             System.out.println("response body : " + result);
 
-            //Gson 라이브러리에 포함된 클래스로 JSON파싱 객체 생성
             JsonParser parser = new JsonParser();
             JsonElement element = parser.parse(result);
 
@@ -114,17 +106,18 @@ public class MemberService {
         JsonNode kakaoUserInfo = getUserResource(accessToken, kakaoResourceUri);
         System.out.println("kakaoUserInfo = " + kakaoUserInfo);
         String nickname = kakaoUserInfo.get("properties").get("nickname").asText();
+        String email = kakaoUserInfo.get("kakao_account").get("email").asText();
 
         Member member = memberRepository.findByName(nickname);
         if(member == null){
             Member newMember = Member.builder()
                     .name(nickname)
-                    .email("kakaologin")
+                    .email(email)
                     .build();
             memberRepository.save(newMember);
             member = newMember;
         }
-        return MemberDto.from(member.getName());
+        return MemberDto.from(member.getName(), member.getEmail());
     }
 
     private JsonNode getUserResource(String accessToken, String resourceUri) {
