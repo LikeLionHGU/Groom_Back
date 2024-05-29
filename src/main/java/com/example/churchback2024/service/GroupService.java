@@ -5,6 +5,7 @@ import com.example.churchback2024.domain.GroupC;
 import com.example.churchback2024.domain.Member;
 import com.example.churchback2024.domain.MemberGroup;
 import com.example.churchback2024.dto.GroupDto;
+import com.example.churchback2024.dto.MemberGroupDto;
 import com.example.churchback2024.exception.group.DuplicateGroupException;
 import com.example.churchback2024.exception.group.GroupNotFoundException;
 import com.example.churchback2024.exception.member.MemberNotFoundException;
@@ -126,6 +127,14 @@ public GroupDto addGroup(GroupDto groupDto) {
         List<MemberGroup> memberGroups = memberGroupRepository.findByMember(member);
         return memberGroups.stream()
                 .map(GroupDto::from)
+                .collect(Collectors.toList());
+    }
+
+    public List<MemberGroupDto> getGroupInfoListByGroupId(Long groupId) {
+        GroupC group = groupRepository.findById(groupId).orElseThrow();
+        List<MemberGroup> memberGroups = memberGroupRepository.findByGroupC(group);
+        return memberGroups.stream()
+                .map(MemberGroupDto::from)
                 .collect(Collectors.toList());
     }
 }

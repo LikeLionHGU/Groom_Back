@@ -5,8 +5,10 @@ import com.example.churchback2024.controller.request.group.GroupCreateRequest;
 import com.example.churchback2024.controller.request.group.GroupUpdateRequest;
 import com.example.churchback2024.controller.response.group.GroupListResponse;
 import com.example.churchback2024.controller.response.group.GroupResponse;
+import com.example.churchback2024.controller.response.group.MemberGroupListResponse;
 import com.example.churchback2024.controller.response.member.MemberInfoResponse;
 import com.example.churchback2024.dto.GroupDto;
+import com.example.churchback2024.dto.MemberGroupDto;
 import com.example.churchback2024.service.GroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,13 +30,18 @@ public class GroupController {
         return ResponseEntity.ok(groupListResponse);
     }
 
-    @GetMapping("/list/{memberId}")
+    @GetMapping("/list/member/{memberId}")
     public ResponseEntity<GroupListResponse> getGroupListAddMember(@PathVariable Long memberId){
         List<GroupDto> dtoList = groupService.getGroupListByMemberId(memberId);
         GroupListResponse groupListResponse = new GroupListResponse(dtoList);
         return ResponseEntity.ok(groupListResponse);
     }
-
+    @GetMapping("/list/group/{groupId}")
+    public ResponseEntity<MemberGroupListResponse> getGroupInfo(@PathVariable Long groupId){
+        List<MemberGroupDto> dtoList = groupService.getGroupInfoListByGroupId(groupId);
+        MemberGroupListResponse memberGroupListResponse = new MemberGroupListResponse(dtoList);
+        return ResponseEntity.ok(memberGroupListResponse);
+    }
     @GetMapping("/{groupId}/{memberId}")
     public ResponseEntity<MemberInfoResponse> findInfoByMemberGroup(@PathVariable Long groupId, @PathVariable Long memberId){
         GroupDto groupDto = groupService.getGroupInfo(groupId, memberId);
