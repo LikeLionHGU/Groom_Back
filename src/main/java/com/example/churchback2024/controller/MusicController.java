@@ -26,11 +26,7 @@ public class MusicController {
         MusicListResponse musicListResponse = musicService.getMusicList(groupId);
         return ResponseEntity.ok(musicListResponse);
     }
-    @GetMapping("/list/{groupId}/{path}")
-    public ResponseEntity<MusicListResponse> findMusicListByPath(@PathVariable Long groupId, @PathVariable String path) {
-        MusicListResponse musicListResponse = musicService.getMusicListByPath(groupId, path);
-        return ResponseEntity.ok(musicListResponse);
-    }
+
     @GetMapping("/{musicId}")
     public ResponseEntity<MusicResponse> findMusic(@PathVariable Long musicId) {
         MusicResponse musicResponse = musicService.getMusic(musicId);

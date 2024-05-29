@@ -21,10 +21,11 @@ public class Music extends BaseEntity {
     private String link;
     private String description;
     private String musicImageUrl;
+    private String version;
 
     @ManyToOne
-    @JoinColumn(name = "folderId")
-    private Folder folder;
+    @JoinColumn(name = "groupId")
+    private GroupC group;
 
     public void update(MusicDto musicDto, String url) {
         this.musicName = musicDto.getMusicName();
@@ -32,6 +33,7 @@ public class Music extends BaseEntity {
         this.link = musicDto.getLink();
         this.description = musicDto.getDescription();
         this.musicImageUrl = url;
+        this.version = musicDto.getVersion();
     }
 
     public static Music from(MusicDto musicDto) {
@@ -41,16 +43,18 @@ public class Music extends BaseEntity {
                 .link(musicDto.getLink())
                 .description(musicDto.getDescription())
                 .musicImageUrl(musicDto.getMusicImageUrl())
+                .version(musicDto.getVersion())
                 .build();
     }
-    public static Music from(MusicDto musicDto, Folder folder, String musicImageUrl) {
+    public static Music from(MusicDto musicDto, GroupC group, String musicImageUrl) {
         return Music.builder()
                 .musicName(musicDto.getMusicName())
                 .code(musicDto.getCode())
                 .link(musicDto.getLink())
                 .description(musicDto.getDescription())
                 .musicImageUrl(musicImageUrl)
-                .folder(folder)
+                .group(group)
+                .version(musicDto.getVersion())
                 .build();
     }
 }

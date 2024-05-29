@@ -13,17 +13,17 @@ public class MusicResponse {
     private String code;
     private String link;
     private String description;
-    private Long folderId;
     private String musicImageUrl;
     private Long musicId;
+    private String version;
     public MusicResponse(Music music, String url) {
         this.musicName = music.getMusicName();
         this.code = music.getCode();
         this.link = music.getLink();
         this.description = music.getDescription();
-        this.folderId = music.getFolder().getFolderId();
         this.musicImageUrl = url;
         this.musicId = music.getMusicId();
+        this.version = music.getVersion();
     }
 
     public MusicResponse (MusicDto musicDto) {
@@ -33,5 +33,6 @@ public class MusicResponse {
         this.description = musicDto.getDescription();
         this.musicImageUrl = musicDto.getMusicImageUrl();
         this.musicId = musicDto.getMusicId();
+        this.version = musicDto.getVersion();
     }
 }
