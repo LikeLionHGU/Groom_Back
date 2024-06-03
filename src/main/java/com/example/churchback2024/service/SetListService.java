@@ -1,7 +1,10 @@
 package com.example.churchback2024.service;
 
 import com.example.churchback2024.controller.request.setlist.MusicSetListCreateRequest;
+import com.example.churchback2024.controller.response.music.MusicListResponse;
+import com.example.churchback2024.controller.response.music.MusicResponse;
 import com.example.churchback2024.controller.response.setlist.MusicSetListResponse;
+import com.example.churchback2024.controller.response.setlist.SetListResponse;
 import com.example.churchback2024.domain.GroupC;
 import com.example.churchback2024.domain.Music;
 import com.example.churchback2024.domain.MusicSetList;
@@ -31,16 +34,6 @@ public class SetListService {
     private final MusicRepository musicRepository;
     private final MusicSetListRepository musicSetListRepository;
 
-//    public MusicSetListDto createSetList(MusicSetListDto musicSetListDto) {
-//        Music music = musicRepository.findByMusicId(musicSetListDto.getMusicId());
-//        if(music == null)
-//            throw new MusicNotFoundException();
-//        GroupC group = groupRepository.findByGroupId(music.getGroup().getGroupId());
-//        if(group == null)
-//            throw new GroupNotFoundException();
-//        MusicSetList musicSetList = MusicSetList.from(musicSetListDto, music, group);
-//        return MusicSetListDto.from(musicSetList);
-//    }
     public Long createSetList(SetListDto setListDto) {
         GroupC group = groupRepository.findByGroupId(setListDto.getGroupId());
         if(group == null)
@@ -74,5 +67,27 @@ public class SetListService {
     }
 
 
+    public List<SetListResponse> getSetList(Long groupId) {
+        List<SetList> setList = setListRepository.findByGroupGroupId(groupId);
+        List<SetListResponse> setListResponse = new ArrayList<>();
+        for (SetList s : setList) {
+            List<MusicSetList> musicSetList = musicSetListRepository.findBySetListSetListId(s.getSetListId());
+            List<MusicSetListResponse> musicSetListResponse = new ArrayList<>();
+            for (MusicSetList m : musicSetList) {
+                musicSetListResponse.add(new MusicSetListResponse(m));
+            }
+            setListResponse.add(new SetListResponse(SetListDto.from(s), musicSetListResponse));
+        }
+        return setListResponse;
+    }
 
+    public MusicListResponse getSetListById(Long setListId) {
+        SetList setList = setListRepository.findById(setListId).orElseThrow(SetListNotFoundException::new);
+        List<MusicSetList> musicSetList = musicSetListRepository.findBySetListSetListId(setList.getSetListId());
+        List<MusicResponse> musics = new ArrayList<>();
+        for (MusicSetList m : musicSetList) {
+            musics.add(new MusicResponse(m.getMusic(), m.getDescription()));
+        }
+        return new MusicListResponse(musics);
+    }
 }
