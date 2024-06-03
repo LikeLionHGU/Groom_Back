@@ -3,6 +3,7 @@ package com.example.churchback2024.service;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.example.churchback2024.controller.request.music.MusicListRequest;
 import com.example.churchback2024.controller.response.music.MusicListResponse;
 import com.example.churchback2024.controller.response.music.MusicResponse;
 import com.example.churchback2024.domain.Folder;
@@ -104,6 +105,14 @@ public class MusicService {
 
     public MusicListResponse getMusicList(Long groupId) {
         List<Music> musics = musicRepository.findByGroupContaining(groupId);
+
+        List<MusicResponse> musicResponses = musics.stream()
+                .map(music -> new MusicResponse(music, generateImageUrl(music.getMusicImageUrl())))
+                .collect(Collectors.toList());
+        return new MusicListResponse(musicResponses);
+    }
+    public MusicListResponse getMusicList(Long groupId, MusicListRequest musicListRequest) {
+        List<Music> musics = musicRepository.findByGroupGroupIdAndMusicIdIn(groupId, musicListRequest.getMusicIdList());
 
         List<MusicResponse> musicResponses = musics.stream()
                 .map(music -> new MusicResponse(music, generateImageUrl(music.getMusicImageUrl())))

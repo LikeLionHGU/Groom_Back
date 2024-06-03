@@ -13,6 +13,7 @@ public interface MusicRepository extends JpaRepository<Music, Long> {
     Music findByMusicId(Long musicId);
     Music findByMusicName(String musicName);
     List<Music> findByGroupGroupId(@Param("groupId") Long groupId);
+    List<Music> findByGroupGroupIdAndMusicIdIn(Long groupId, List<Long> musicId);
     @Query("SELECT m FROM Music m " +
             "WHERE m.group.groupId = :groupId")
     List<Music> findByGroupContaining(@Param("groupId") Long groupId);
