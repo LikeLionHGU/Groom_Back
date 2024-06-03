@@ -1,6 +1,7 @@
 package com.example.churchback2024.controller;
 
 import com.example.churchback2024.controller.request.music.MusicCreateRequest;
+import com.example.churchback2024.controller.request.music.MusicListRequest;
 import com.example.churchback2024.controller.request.music.MusicUpdateRequest;
 import com.example.churchback2024.controller.response.music.MusicListResponse;
 import com.example.churchback2024.controller.response.music.MusicResponse;
@@ -56,6 +57,11 @@ public class MusicController {
     @GetMapping("/search/musicName/{groupId}/{musicName}")
     public ResponseEntity<MusicListResponse> searchMusicByName(@PathVariable Long groupId, @PathVariable String musicName) {
         MusicListResponse musicListResponse = musicService.searchMusicByMusicName(groupId, musicName);
+        return ResponseEntity.ok(musicListResponse);
+    }
+    @GetMapping("/musicList/{groupId}")
+    public ResponseEntity<MusicListResponse> musicList(@PathVariable Long groupId, @RequestBody MusicListRequest request) {
+        MusicListResponse musicListResponse = musicService.getMusicList(groupId, request);
         return ResponseEntity.ok(musicListResponse);
     }
 }
