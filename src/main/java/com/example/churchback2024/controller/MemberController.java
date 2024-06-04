@@ -26,16 +26,12 @@ public class MemberController {
     }
 
     @GetMapping("/kakao/callback")
-    public void kakaoCallback(@RequestParam String code) {
+    public ResponseEntity<KaKaoMemberLoginResponse> kakaoCallback(@RequestParam String code) {
         String accessToken = memberService.getKakaoAccessToken(code);
-        System.out.println(accessToken);
-    }
 
-    @PostMapping("/kakao/callback")
-    public ResponseEntity<KaKaoMemberLoginResponse> kakaoLogin(@RequestHeader("Authorization") String authorizationHeader){
-        String accessToken = authorizationHeader.substring("Bearer ".length());
         MemberDto memberDto = memberService.kakaoLogin(accessToken);
         KaKaoMemberLoginResponse kaKaoMemberLoginResponse = new KaKaoMemberLoginResponse(memberDto);
+
         return ResponseEntity.ok(kaKaoMemberLoginResponse);
     }
 
