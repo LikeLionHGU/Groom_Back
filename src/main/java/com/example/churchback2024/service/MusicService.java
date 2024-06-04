@@ -6,15 +6,12 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.churchback2024.controller.request.music.MusicListRequest;
 import com.example.churchback2024.controller.response.music.MusicListResponse;
 import com.example.churchback2024.controller.response.music.MusicResponse;
-import com.example.churchback2024.domain.Folder;
 import com.example.churchback2024.domain.GroupC;
 import com.example.churchback2024.domain.Music;
 import com.example.churchback2024.dto.MusicDto;
-import com.example.churchback2024.exception.folder.FolderNotFoundException;
 import com.example.churchback2024.exception.group.GroupNotFoundException;
 import com.example.churchback2024.exception.music.DuplicateMusicException;
 import com.example.churchback2024.exception.music.MusicNotFoundException;
-import com.example.churchback2024.repository.FolderRepository;
 import com.example.churchback2024.repository.GroupRepository;
 import com.example.churchback2024.repository.MusicRepository;
 import lombok.RequiredArgsConstructor;
@@ -119,16 +116,6 @@ public class MusicService {
                 .collect(Collectors.toList());
         return new MusicListResponse(musicResponses);
     }
-
-    public MusicListResponse getMusicListByPath(Long groupId) {
-        List<Music> musics = musicRepository.findByGroupGroupId(groupId);
-
-        List<MusicResponse> musicResponses = musics.stream()
-                .map(music -> new MusicResponse(music, generateImageUrl(music.getMusicImageUrl())))
-                .collect(Collectors.toList());
-        return new MusicListResponse(musicResponses);
-    }
-
     public MusicResponse getMusic(Long musicId) {
         Music music = musicRepository.findById(musicId).orElseThrow(MusicNotFoundException::new);
         return new MusicResponse(music, generateImageUrl(music.getMusicImageUrl()));
