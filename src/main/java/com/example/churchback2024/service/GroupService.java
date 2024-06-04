@@ -57,32 +57,32 @@ public class GroupService {
         return GroupDto.from(newGroup);
     }
 
-public GroupDto addGroup(GroupDto groupDto) {
-    Member member = memberRepository.findByMemberId(groupDto.getMemberId());
-    if (member == null) {
-        throw new MemberNotFoundException();
+    public GroupDto addGroup(GroupDto groupDto) {
+        Member member = memberRepository.findByMemberId(groupDto.getMemberId());
+        if (member == null) {
+            throw new MemberNotFoundException();
+        }
+
+        List<MemberGroup> memberGroups = memberGroupRepository.findByMember(member);
+        if (memberGroups.size() >= 3) {
+            throw new IllegalStateException("멤버는 최대 3개의 그룹에만 가입할 수 있습니다.");
+        }
+
+        GroupC groupC = groupRepository.findByInvitationCode(groupDto.getInvitationCode());
+        if (groupC == null) {
+            throw new GroupNotFoundException();
+        }
+
+        MemberGroup memberGroup = memberGroupRepository.findByMemberAndGroupC(member, groupC);
+        if (memberGroup != null) {
+            throw new DuplicateGroupException();
+        }
+
+        memberGroup = MemberGroup.from(member, groupC, groupDto);
+        memberGroupRepository.save(memberGroup);
+
+        return GroupDto.from(memberGroup);
     }
-
-    List<MemberGroup> memberGroups = memberGroupRepository.findByMember(member);
-    if (memberGroups.size() >= 3) {
-        throw new IllegalStateException("멤버는 최대 3개의 그룹에만 가입할 수 있습니다.");
-    }
-
-    GroupC groupC = groupRepository.findByInvitationCode(groupDto.getInvitationCode());
-    if (groupC == null) {
-        throw new GroupNotFoundException();
-    }
-
-    MemberGroup memberGroup = memberGroupRepository.findByMemberAndGroupC(member, groupC);
-    if (memberGroup != null) {
-        throw new DuplicateGroupException();
-    }
-
-    memberGroup = MemberGroup.from(member, groupC, groupDto);
-    memberGroupRepository.save(memberGroup);
-
-    return GroupDto.from(memberGroup);
-}
     public String generateRandomInvitationCode() {
         String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         StringBuilder sb = new StringBuilder();
@@ -119,6 +119,10 @@ public GroupDto addGroup(GroupDto groupDto) {
         return GroupDto.from(memberGroup);
     }
 
+    public GroupDto getGroupInfo(Long groupId) {
+        GroupC group = groupRepository.findById(groupId).orElseThrow();
+        return GroupDto.from(group);
+    }
     public List<GroupDto> getGroupListByMemberId(Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow();
         if(member == null) {

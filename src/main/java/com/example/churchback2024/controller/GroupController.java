@@ -29,6 +29,12 @@ public class GroupController {
         GroupListResponse groupListResponse = new GroupListResponse(dtoList);
         return ResponseEntity.ok(groupListResponse);
     }
+    @GetMapping("/{groupId}")
+    public ResponseEntity<GroupResponse> getGroupInfoByGroupId(@PathVariable Long groupId){
+        GroupDto groupDto = groupService.getGroupInfo(groupId);
+        GroupResponse groupResponse = new GroupResponse(groupDto);
+        return ResponseEntity.ok(groupResponse);
+    }
 
     @GetMapping("/list/member/{memberId}")
     public ResponseEntity<GroupListResponse> getGroupListAddMember(@PathVariable Long memberId){
