@@ -11,11 +11,13 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SetListResponse {
+    private Long setListId;
     private String setListName;
     private Long groupId;
     private List<MusicSetListResponse> musicList;
 
     public SetListResponse(SetListDto setListDto, List<MusicSetListResponse> musicList) {
+        this.setListId = setListDto.getSetListId();
         this.setListName = setListDto.getSetListName();
         this.groupId = setListDto.getGroupId();
         this.musicList = musicList;

@@ -16,12 +16,14 @@ import java.util.List;
 @Builder
 @Getter
 public class SetListDto {
+    private Long setListId;
     private String setListName;
     private Long groupId;
     private List<MusicSetListResponse> musicList;
 
     public static SetListDto from(SetList setList) {
         return SetListDto.builder()
+                .setListId(setList.getSetListId())
                 .setListName(setList.getSetListName())
                 .groupId(setList.getGroup().getGroupId())
                 .build();
