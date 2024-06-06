@@ -43,6 +43,7 @@ public class MemberDto {
         return MemberDto.builder()
                 .name(member.getName())
                 .email(member.getEmail())
+                .isNew(member.getIsNew())
                 .build();
     }
 

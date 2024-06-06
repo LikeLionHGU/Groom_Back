@@ -48,6 +48,7 @@ public class MemberService {
             Member newMember = Member.builder()
                     .email(email)
                     .name(name)
+                    .isNew(true)
                     .build();
             memberRepository.save(newMember);
             member = newMember;
@@ -55,7 +56,7 @@ public class MemberService {
         else{
             member.update(false);
         }
-        return MemberDto.from(member.getName(), member.getEmail(), member.getMemberId());
+        return MemberDto.from(member);
     }
 
     public String getKakaoAccessToken (String code) {
@@ -116,6 +117,7 @@ public class MemberService {
             Member newMember = Member.builder()
                     .name(nickname)
                     .email(email)
+                    .isNew(true)
                     .build();
             memberRepository.save(newMember);
             member = newMember;
@@ -123,7 +125,7 @@ public class MemberService {
         else{
             member.update(false);
         }
-        return MemberDto.from(member.getName(), member.getEmail(), member.getMemberId());
+        return MemberDto.from(member);
     }
 
     private JsonNode getUserResource(String accessToken, String resourceUri) {
