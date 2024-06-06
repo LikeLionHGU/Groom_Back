@@ -59,7 +59,7 @@ public class MusicController {
         MusicListResponse musicListResponse = musicService.searchMusicByMusicName(groupId, musicName);
         return ResponseEntity.ok(musicListResponse);
     }
-    @GetMapping("/musicList/{groupId}")
+    @PostMapping("/musicList/{groupId}")
     public ResponseEntity<MusicListResponse> musicList(@PathVariable Long groupId, @RequestBody MusicListRequest request) {
         MusicListResponse musicListResponse = musicService.getMusicList(groupId, request);
         return ResponseEntity.ok(musicListResponse);
