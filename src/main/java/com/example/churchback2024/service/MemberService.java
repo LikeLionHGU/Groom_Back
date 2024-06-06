@@ -52,6 +52,9 @@ public class MemberService {
             memberRepository.save(newMember);
             member = newMember;
         }
+        else{
+            member.update(false);
+        }
         return MemberDto.from(member.getName(), member.getEmail(), member.getMemberId());
     }
 
@@ -116,6 +119,9 @@ public class MemberService {
                     .build();
             memberRepository.save(newMember);
             member = newMember;
+        }
+        else{
+            member.update(false);
         }
         return MemberDto.from(member.getName(), member.getEmail(), member.getMemberId());
     }
