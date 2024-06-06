@@ -19,6 +19,7 @@ public class MemberDto {
     private String email;
     private Long memberId;
     private Long groupId;
+    private Boolean isNew;
 
     public static MemberDto from(MemberSignUpRequest request){
         return MemberDto.builder()
