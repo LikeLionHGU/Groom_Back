@@ -13,10 +13,14 @@ import lombok.NoArgsConstructor;
 public class GroupResponse {
     private Long groupId;
     private String groupName;
+    private String description;
+    private String groupImage;
 
-    public GroupResponse(GroupC groupC) {
+    public GroupResponse(GroupC groupC, String groupImage) {
         this.groupId = groupC.getGroupId();
         this.groupName = groupC.getGroupName();
+        this.description = groupC.getDescription();
+        this.groupImage = groupImage;
     }
 
     public GroupResponse(GroupDto groupDto) {

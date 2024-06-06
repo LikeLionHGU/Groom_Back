@@ -21,9 +21,13 @@ public class GroupC extends BaseEntity{
     private Long groupId;
     private String groupName;
     private String invitationCode;
+    private String groupImage;
+    private String description;
 
-    public void update(GroupDto groupDto) {
+    public void update(GroupDto groupDto, String groupImage) {
         this.groupName = groupDto.getGroupName();
+        this.groupImage = groupImage;
+        this.description = groupDto.getDescription();
     }
 
     public static GroupC from(GroupDto groupDto) {

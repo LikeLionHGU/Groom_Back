@@ -21,6 +21,8 @@ public class GroupDto {
     private String nickname;
     private String position;
     private String invitationCode;
+    private String groupImage;
+    private String description;
 
     public static GroupDto from(GroupCreateRequest groupCreateRequest) {
         return GroupDto.builder()
@@ -41,6 +43,7 @@ public class GroupDto {
     public static GroupDto from(GroupUpdateRequest groupUpdateRequest) {
         return GroupDto.builder()
                 .groupName(groupUpdateRequest.getGroupName())
+                .description(groupUpdateRequest.getDescription())
                 .build();
     }
     public static GroupDto from(GroupC groupC) {
