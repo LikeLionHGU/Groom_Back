@@ -19,6 +19,7 @@ import com.example.churchback2024.repository.MusicSetListRepository;
 import com.example.churchback2024.repository.SetListRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -33,6 +34,11 @@ public class SetListService {
     private final GroupRepository groupRepository;
     private final MusicRepository musicRepository;
     private final MusicSetListRepository musicSetListRepository;
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
+
+    @Value("${cloud.aws.region.static}")
+    private String region;
 
     public Long createSetList(SetListDto setListDto) {
         GroupC group = groupRepository.findByGroupId(setListDto.getGroupId());
@@ -86,8 +92,11 @@ public class SetListService {
         List<MusicSetList> musicSetList = musicSetListRepository.findBySetListSetListId(setList.getSetListId());
         List<MusicResponse> musics = new ArrayList<>();
         for (MusicSetList m : musicSetList) {
-            musics.add(new MusicResponse(m.getMusic(), m.getDescription()));
+            musics.add(new MusicResponse(m.getMusic(), generateImageUrl(m.getMusic().getMusicImageUrl())));
         }
         return new MusicListResponse(musics);
+    }
+    private String generateImageUrl(String storedFileName) {
+        return "https://" + bucket + ".s3." + region + ".amazonaws.com/" + storedFileName;
     }
 }
