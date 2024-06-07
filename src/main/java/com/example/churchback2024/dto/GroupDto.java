@@ -50,6 +50,8 @@ public class GroupDto {
         return GroupDto.builder()
                 .groupId(groupC.getGroupId())
                 .groupName(groupC.getGroupName())
+                .description(groupC.getDescription())
+                .groupImage(groupC.getGroupImage())
                 .build();
     }
     public static GroupDto from(MemberGroup memberGroup){

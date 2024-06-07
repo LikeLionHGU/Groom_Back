@@ -26,6 +26,8 @@ public class GroupResponse {
     public GroupResponse(GroupDto groupDto) {
         this.groupId = groupDto.getGroupId();
         this.groupName = groupDto.getGroupName();
+        this.description = groupDto.getDescription();
+        this.groupImage = groupDto.getGroupImage();
     }
 
     public GroupResponse(MemberGroup memberGroup) {
