@@ -3,6 +3,9 @@ package com.example.churchback2024.service;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.S3ObjectInputStream;
+import com.amazonaws.util.IOUtils;
 import com.example.churchback2024.controller.request.music.MusicListRequest;
 import com.example.churchback2024.controller.response.music.MusicListResponse;
 import com.example.churchback2024.controller.response.music.MusicResponse;
@@ -176,6 +179,56 @@ public class MusicService {
         document.addPage(page);
 
         PDImageXObject pdImage = PDImageXObject.createFromByteArray(document, image.getBytes(), image.getOriginalFilename());
+        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+        contentStream.drawImage(pdImage, 20, 20);
+        contentStream.close();
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        document.save(outputStream);
+        document.close();
+
+        return outputStream.toByteArray();
+    }
+
+    public String downloadMusic(Long musicId) throws IOException {
+        Music music = musicRepository.findByMusicId(musicId);
+        if(music == null){
+            throw new MusicNotFoundException();
+        }
+
+        String musicUrl = music.getMusicImageUrl();
+        String pdfFileName = music.getMusicName() + ".pdf";
+
+        // S3에서 music 파일 다운로드
+        S3Object s3Object = amazonS3.getObject(bucket, musicUrl);
+        S3ObjectInputStream inputStream = s3Object.getObjectContent();
+
+        // 다운로드한 파일을 pdf로 변환
+        byte[] pdfBytes = convertToPdf(IOUtils.toByteArray(inputStream));
+
+        // 변환된 PDF를 임시 파일로 저장
+        File pdfFile = new File(pdfFileName);
+        try (FileOutputStream fos = new FileOutputStream(pdfFile)) {
+            fos.write(pdfBytes);
+        }
+
+        // S3에 pdf 파일 업로드
+        String pdfUrl = uploadFileToS3(pdfFile, music.getGroup().getGroupName());
+
+        // 임시 파일 삭제
+        pdfFile.delete();
+
+        // pdf 파일 url 반환
+        System.out.println("pdfUrl : " + generateImageUrl(pdfUrl));
+        return generateImageUrl(pdfUrl);
+    }
+
+    private byte[] convertToPdf(byte[] imageBytes) throws IOException {
+        PDDocument document = new PDDocument();
+        PDPage page = new PDPage();
+        document.addPage(page);
+
+        PDImageXObject pdImage = PDImageXObject.createFromByteArray(document, imageBytes, "image");
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
         contentStream.drawImage(pdImage, 20, 20);
         contentStream.close();

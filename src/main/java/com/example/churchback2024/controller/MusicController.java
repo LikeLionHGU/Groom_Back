@@ -77,5 +77,11 @@ public class MusicController {
                 .headers(headers)
                 .body(pdfBytes);
     }
+
+    @GetMapping("/download/{musicId}")
+    public ResponseEntity<String> downloadMusic(@PathVariable Long musicId) throws IOException {
+        String musicUrl = musicService.downloadMusic(musicId);
+        return ResponseEntity.ok(musicUrl);
+    }
 }
 
