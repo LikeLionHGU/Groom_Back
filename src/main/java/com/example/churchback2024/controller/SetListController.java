@@ -1,5 +1,6 @@
 package com.example.churchback2024.controller;
 
+import com.example.churchback2024.controller.request.music.MusicIdRequest;
 import com.example.churchback2024.controller.request.setlist.SetListImagesRequest;
 import com.example.churchback2024.controller.request.setlist.MusicSetListCreateRequest;
 import com.example.churchback2024.controller.request.setlist.SetListCreateRequest;
@@ -90,5 +91,11 @@ public class SetListController {
         return ResponseEntity.ok()
                 .headers(headers)
                 .body(baos.toByteArray());
+    }
+
+    @PostMapping("/download/{setListId}")
+    public ResponseEntity<List<String>> downloadSetList(@PathVariable Long setListId, @RequestBody MusicIdRequest musicIdRequest) throws IOException {
+        List<String> musicUrls = setListService.downloadSetList(setListId, musicIdRequest);
+        return ResponseEntity.ok(musicUrls);
     }
 }
