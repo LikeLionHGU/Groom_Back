@@ -132,4 +132,20 @@ public class SetListService {
         }
         setList.update(setListDto);
     }
+
+    public void addMusicSetList(Long setListId, List<MusicSetListCreateRequest> request) {
+        SetList setList = setListRepository.findById(setListId).orElseThrow();
+        for (MusicSetListCreateRequest musicSetListCreateRequest : request) {
+            Music music = musicRepository.findByMusicId(musicSetListCreateRequest.getMusicId());
+            if (music == null) {
+                throw new MusicNotFoundException();
+            }
+            MusicSetList musicSetList = MusicSetList.builder()
+                    .description(musicSetListCreateRequest.getDescription())
+                    .music(music)
+                    .setList(setList)
+                    .build();
+            musicSetListRepository.save(musicSetList);
+        }
+    }
 }
