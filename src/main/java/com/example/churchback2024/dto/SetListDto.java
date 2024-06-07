@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @AllArgsConstructor
@@ -20,12 +21,14 @@ public class SetListDto {
     private String setListName;
     private Long groupId;
     private List<MusicSetListResponse> musicList;
+    private LocalDateTime regDate;
 
     public static SetListDto from(SetList setList) {
         return SetListDto.builder()
                 .setListId(setList.getSetListId())
                 .setListName(setList.getSetListName())
                 .groupId(setList.getGroup().getGroupId())
+                .regDate(setList.getRegDate())
                 .build();
     }
 
