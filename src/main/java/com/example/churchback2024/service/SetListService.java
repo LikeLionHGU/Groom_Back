@@ -92,7 +92,7 @@ public class SetListService {
         List<MusicSetList> musicSetList = musicSetListRepository.findBySetListSetListId(setList.getSetListId());
         List<MusicResponse> musics = new ArrayList<>();
         for (MusicSetList m : musicSetList) {
-            musics.add(new MusicResponse(m.getMusic(), generateImageUrl(m.getMusic().getMusicImageUrl())));
+            musics.add(new MusicResponse(m.getMusic(), generateImageUrl(m.getMusic().getMusicImageUrl()), m.getDescription()));
         }
         return new MusicListResponse(musics);
     }

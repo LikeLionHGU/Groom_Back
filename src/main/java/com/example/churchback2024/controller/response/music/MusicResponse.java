@@ -25,6 +25,15 @@ public class MusicResponse {
         this.musicId = music.getMusicId();
         this.version = music.getVersion();
     }
+    public MusicResponse(Music music, String url, String description) {
+        this.musicName = music.getMusicName();
+        this.code = music.getCode();
+        this.link = music.getLink();
+        this.description = description;
+        this.musicImageUrl = url;
+        this.musicId = music.getMusicId();
+        this.version = music.getVersion();
+    }
 
     public MusicResponse (MusicDto musicDto) {
         this.musicName = musicDto.getMusicName();
