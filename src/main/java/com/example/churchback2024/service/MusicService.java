@@ -18,14 +18,20 @@ import com.example.churchback2024.repository.MusicRepository;
 import com.example.churchback2024.repository.MusicSetListRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -165,4 +171,28 @@ public class MusicService {
         return "https://" + bucket + ".s3." + region + ".amazonaws.com/" + storedFileName;
     }
 
+    public byte[] convertImageToPdf(MultipartFile image) throws IOException {
+        PDDocument document = new PDDocument();
+        PDPage page = new PDPage();
+        document.addPage(page);
+
+        PDImageXObject pdImage = PDImageXObject.createFromByteArray(document, image.getBytes(), image.getOriginalFilename());
+        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+        contentStream.drawImage(pdImage, 20, 20);
+        contentStream.close();
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        document.save(outputStream);
+        document.close();
+
+        return outputStream.toByteArray();
+    }
+
+    public List<byte[]> convertImagesToPdfs(List<MultipartFile> images) throws IOException {
+        List<byte[]> pdfFiles = new ArrayList<>();
+        for (MultipartFile image : images) {
+            pdfFiles.add(convertImageToPdf(image));
+        }
+        return pdfFiles;
+    }
 }
