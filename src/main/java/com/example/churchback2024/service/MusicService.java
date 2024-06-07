@@ -92,6 +92,7 @@ public class MusicService {
     public MusicDto createMusic(MusicDto musicDto, MultipartFile multipartFile) throws IOException {
         GroupC group = groupRepository.findByGroupId(musicDto.getGroupId());
         Music existingMusic = musicRepository.findByMusicName(musicDto.getMusicName());
+//        musicImageUrl = "/지히/defaultImg.svg_898e4dfc-f740-458e-850f-42f0800ba78b";
         if (existingMusic != null) {
             throw new DuplicateMusicException();
         }
@@ -102,6 +103,9 @@ public class MusicService {
             File uploadFile = convert(multipartFile)
                     .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환 실패"));
             musicImageUrl = uploadFileToS3(uploadFile, group.getGroupName());
+        }
+        else {
+            musicImageUrl = "지히/defaultImg.svg_898e4dfc-f740-458e-850f-42f0800ba78b";
         }
         Music music = Music.from(musicDto, group, musicImageUrl);
         musicRepository.save(music);
