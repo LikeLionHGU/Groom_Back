@@ -21,6 +21,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PatchMapping;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -122,5 +123,13 @@ public class SetListService {
     public LocalDateTime getRegDate(Long setListId) {
         SetList setList = setListRepository.findBySetListId(setListId);
         return setList.getRegDate();
+    }
+
+    public void updateSetList(Long setListId, SetListDto setListDto) {
+        SetList setList = setListRepository.findBySetListId(setListId);
+        if (setList == null) {
+            throw new SetListNotFoundException();
+        }
+        setList.update(setListDto);
     }
 }

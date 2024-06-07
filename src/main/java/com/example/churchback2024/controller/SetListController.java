@@ -35,7 +35,11 @@ public class SetListController {
     private List<MusicSetListResponse> createMusicDescription(Long setListId, List<MusicSetListCreateRequest> request) {
         return setListService.createMusicSetList(setListId, request);
     }
-
+    @PatchMapping("/update/{setListId}")
+    public void updateSetList(@PathVariable Long setListId, @RequestBody SetListCreateRequest setListCreateRequest) {
+        SetListDto setListDto = SetListDto.from(setListCreateRequest);
+        setListService.updateSetList(setListId, setListDto);
+    }
     @GetMapping("/list/{groupId}")
     public ResponseEntity<List<SetListResponse>> findSetList(@PathVariable Long groupId) {
         List<SetListResponse> setListResponse = setListService.getSetList(groupId);

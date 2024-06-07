@@ -31,8 +31,8 @@ public class SetList extends BaseEntity{
                 .group(group)
                 .build();
     }
-    public void update(String setListName, String description) {
-        this.setListName = setListName;
+    public void update(SetListDto setListDto) {
+        this.setListName = setListDto.getSetListName();
     }
 
 }
