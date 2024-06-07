@@ -94,7 +94,7 @@ public class MusicService {
 
     public MusicDto createMusic(MusicDto musicDto, MultipartFile multipartFile) throws IOException {
         GroupC group = groupRepository.findByGroupId(musicDto.getGroupId());
-        Music existingMusic = musicRepository.findByMusicName(musicDto.getMusicName());
+        Music existingMusic = musicRepository.findByMusicNameAndGroupGroupId(musicDto.getMusicName(), musicDto.getGroupId());
         if (existingMusic != null) {
             throw new DuplicateMusicException();
         }

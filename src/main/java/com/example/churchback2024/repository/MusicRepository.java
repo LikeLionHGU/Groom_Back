@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface MusicRepository extends JpaRepository<Music, Long> {
     Music findByMusicId(Long musicId);
-    Music findByMusicName(String musicName);
+    Music findByMusicNameAndGroupGroupId(String musicName, Long groupId);
     List<Music> findByGroupGroupId(@Param("groupId") Long groupId);
     List<Music> findByGroupGroupIdAndMusicIdIn(Long groupId, List<Long> musicId);
     @Query("SELECT m FROM Music m " +
