@@ -180,7 +180,26 @@ public class MusicService {
 
         PDImageXObject pdImage = PDImageXObject.createFromByteArray(document, image.getBytes(), image.getOriginalFilename());
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
-        contentStream.drawImage(pdImage, 20, 20);
+
+        // Get dimensions of the image and the page
+        float imageWidth = pdImage.getWidth();
+        float imageHeight = pdImage.getHeight();
+        float pageWidth = page.getMediaBox().getWidth();
+        float pageHeight = page.getMediaBox().getHeight();
+
+        // Calculate the scale factor to fit the image within the page while maintaining the aspect ratio
+        float scale = Math.min(pageWidth / imageWidth, pageHeight / imageHeight);
+
+        // Calculate the new dimensions of the image
+        float scaledWidth = imageWidth * scale;
+        float scaledHeight = imageHeight * scale;
+
+        // Calculate the position to center the image on the page
+        float xPosition = (pageWidth - scaledWidth) / 2;
+        float yPosition = (pageHeight - scaledHeight) / 2;
+
+        // Draw the image with the calculated dimensions and position
+        contentStream.drawImage(pdImage, xPosition, yPosition, scaledWidth, scaledHeight);
         contentStream.close();
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -189,6 +208,43 @@ public class MusicService {
 
         return outputStream.toByteArray();
     }
+
+    private byte[] convertToPdf(byte[] imageBytes) throws IOException {
+        PDDocument document = new PDDocument();
+        PDPage page = new PDPage();
+        document.addPage(page);
+
+        PDImageXObject pdImage = PDImageXObject.createFromByteArray(document, imageBytes, "image");
+        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
+        // Get dimensions of the image and the page
+        float imageWidth = pdImage.getWidth();
+        float imageHeight = pdImage.getHeight();
+        float pageWidth = page.getMediaBox().getWidth();
+        float pageHeight = page.getMediaBox().getHeight();
+
+        // Calculate the scale factor to fit the image within the page while maintaining the aspect ratio
+        float scale = Math.min(pageWidth / imageWidth, pageHeight / imageHeight);
+
+        // Calculate the new dimensions of the image
+        float scaledWidth = imageWidth * scale;
+        float scaledHeight = imageHeight * scale;
+
+        // Calculate the position to center the image on the page
+        float xPosition = (pageWidth - scaledWidth) / 2;
+        float yPosition = (pageHeight - scaledHeight) / 2;
+
+        // Draw the image with the calculated dimensions and position
+        contentStream.drawImage(pdImage, xPosition, yPosition, scaledWidth, scaledHeight);
+        contentStream.close();
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        document.save(outputStream);
+        document.close();
+
+        return outputStream.toByteArray();
+    }
+
 
     public String downloadMusic(Long musicId) throws IOException {
         Music music = musicRepository.findByMusicId(musicId);
@@ -221,22 +277,5 @@ public class MusicService {
         // pdf 파일 url 반환
         System.out.println("pdfUrl : " + generateImageUrl(pdfUrl));
         return generateImageUrl(pdfUrl);
-    }
-
-    private byte[] convertToPdf(byte[] imageBytes) throws IOException {
-        PDDocument document = new PDDocument();
-        PDPage page = new PDPage();
-        document.addPage(page);
-
-        PDImageXObject pdImage = PDImageXObject.createFromByteArray(document, imageBytes, "image");
-        PDPageContentStream contentStream = new PDPageContentStream(document, page);
-        contentStream.drawImage(pdImage, 20, 20);
-        contentStream.close();
-
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        document.save(outputStream);
-        document.close();
-
-        return outputStream.toByteArray();
     }
 }
