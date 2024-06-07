@@ -99,4 +99,12 @@ public class SetListService {
     private String generateImageUrl(String storedFileName) {
         return "https://" + bucket + ".s3." + region + ".amazonaws.com/" + storedFileName;
     }
+
+    public void deleteSetListMusic(Long setListId, Long musicId) {
+        MusicSetList musicSetList = musicSetListRepository.findBySetListSetListIdAndMusicMusicId(setListId, musicId);
+        if (musicSetList == null) {
+            throw new SetListNotFoundException();
+        }
+        musicSetListRepository.delete(musicSetList);
+    }
 }

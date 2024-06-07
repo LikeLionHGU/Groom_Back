@@ -45,4 +45,8 @@ public class SetListController {
         MusicListResponse musicListResponse = setListService.getSetListById(setListId);
         return ResponseEntity.ok(musicListResponse);
     }
+    @DeleteMapping("/delete/{setListId}/{musicId}")
+    public void deleteSetListMusic(@PathVariable Long setListId, @PathVariable Long musicId) {
+        setListService.deleteSetListMusic(setListId, musicId);
+    }
 }

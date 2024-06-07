@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface MusicSetListRepository extends JpaRepository<MusicSetList, Long>{
     List<MusicSetList> findBySetListSetListId(Long setListId);
+
+    MusicSetList findBySetListSetListIdAndMusicMusicId(Long setListId, Long musicId);
 }
