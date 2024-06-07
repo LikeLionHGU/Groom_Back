@@ -44,6 +44,7 @@ public class MemberDto {
                 .name(member.getName())
                 .email(member.getEmail())
                 .isNew(member.getIsNew())
+                .memberId(member.getMemberId())
                 .build();
     }
 
