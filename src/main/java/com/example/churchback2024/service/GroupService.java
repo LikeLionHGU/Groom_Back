@@ -3,6 +3,7 @@ package com.example.churchback2024.service;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.example.churchback2024.controller.request.group.GroupMemberUpdateRequest;
 import com.example.churchback2024.controller.response.group.GroupResponse;
 import com.example.churchback2024.domain.GroupC;
 import com.example.churchback2024.domain.Member;
@@ -212,5 +213,14 @@ public class GroupService {
         Member member = memberRepository.findById(memberId).orElseThrow();
         MemberGroup memberGroup = memberGroupRepository.findByMemberAndGroupC(member, group);
         memberGroupRepository.delete(memberGroup);
+    }
+
+    public GroupDto updateMemberGroup(Long groupId, Long memberId, GroupMemberUpdateRequest groupMemberUpdateRequest) {
+        GroupC group = groupRepository.findById(groupId).orElseThrow();
+        Member member = memberRepository.findById(memberId).orElseThrow();
+        MemberGroup memberGroup = memberGroupRepository.findByMemberAndGroupC(member, group);
+        memberGroup.update(groupMemberUpdateRequest);
+        memberGroupRepository.save(memberGroup);
+        return GroupDto.from(memberGroup);
     }
 }

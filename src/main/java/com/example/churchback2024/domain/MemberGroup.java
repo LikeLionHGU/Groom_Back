@@ -1,6 +1,8 @@
 package com.example.churchback2024.domain;
 
+import com.example.churchback2024.controller.request.group.GroupMemberUpdateRequest;
 import com.example.churchback2024.dto.GroupDto;
+import com.example.churchback2024.dto.MemberGroupDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,5 +38,9 @@ public class MemberGroup extends BaseEntity{
                 .nickname(groupDto.getNickname())
                 .description(description)
                 .build();
+    }
+
+    public void update(GroupMemberUpdateRequest groupMemberUpdateRequest) {
+        this.description = groupMemberUpdateRequest.getDescription();
     }
 }
