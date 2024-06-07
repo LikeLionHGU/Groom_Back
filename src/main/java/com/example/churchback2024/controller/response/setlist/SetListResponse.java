@@ -23,6 +23,8 @@ public class SetListResponse {
         this.setListId = setListDto.getSetListId();
         this.setListName = setListDto.getSetListName();
         this.groupId = setListDto.getGroupId();
+        this.year = setListDto.getRegDate().format(DateTimeFormatter.ofPattern("yyyy"));
+        this.month = setListDto.getRegDate().format(DateTimeFormatter.ofPattern("MM"));
         this.musicList = musicList;
     }
     public SetListResponse(SetListDto setListDto, List<MusicSetListResponse> musicList, LocalDateTime regDate) {
