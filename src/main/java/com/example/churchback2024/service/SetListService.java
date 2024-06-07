@@ -22,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -116,5 +117,10 @@ public class SetListService {
         List<MusicSetList> musicSetList = musicSetListRepository.findBySetListSetListId(setListId);
         musicSetListRepository.deleteAll(musicSetList);
         setListRepository.deleteById(setListId);
+    }
+
+    public LocalDateTime getRegDate(Long setListId) {
+        SetList setList = setListRepository.findBySetListId(setListId);
+        return setList.getRegDate();
     }
 }

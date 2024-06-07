@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -23,7 +24,13 @@ public class SetListResponse {
         this.setListName = setListDto.getSetListName();
         this.groupId = setListDto.getGroupId();
         this.musicList = musicList;
-        this.year = setListDto.getRegDate().format(DateTimeFormatter.ofPattern("yyyy"));
-        this.month = setListDto.getRegDate().format(DateTimeFormatter.ofPattern("MM"));
+    }
+    public SetListResponse(SetListDto setListDto, List<MusicSetListResponse> musicList, LocalDateTime regDate) {
+        this.setListId = setListDto.getSetListId();
+        this.setListName = setListDto.getSetListName();
+        this.groupId = setListDto.getGroupId();
+        this.musicList = musicList;
+        this.year = regDate.format(DateTimeFormatter.ofPattern("yyyy"));
+        this.month = regDate.format(DateTimeFormatter.ofPattern("MM"));
     }
 }

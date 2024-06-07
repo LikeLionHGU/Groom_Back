@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -25,14 +26,14 @@ public class SetListController {
     public ResponseEntity<SetListResponse> createMusicSetList(@RequestBody SetListCreateRequest setListCreateRequest){
         SetListDto setListDto = SetListDto.from(setListCreateRequest);
         Long setListId = setListService.createSetList(setListDto);
+        LocalDateTime regDate = setListService.getRegDate(setListId);
 
         List<MusicSetListResponse> musicList = createMusicDescription(setListId, setListCreateRequest.getMusicSetList());
-        SetListResponse setListResponse = new SetListResponse(setListDto, musicList);
+        SetListResponse setListResponse = new SetListResponse(setListDto, musicList, regDate);
         return ResponseEntity.ok(setListResponse);
     }
     private List<MusicSetListResponse> createMusicDescription(Long setListId, List<MusicSetListCreateRequest> request) {
-        List<MusicSetListResponse> musicSetListResponse = setListService.createMusicSetList(setListId, request);
-        return musicSetListResponse;
+        return setListService.createMusicSetList(setListId, request);
     }
 
     @GetMapping("/list/{groupId}")
