@@ -8,12 +8,14 @@ import com.example.churchback2024.controller.response.music.MusicListResponse;
 import com.example.churchback2024.controller.response.music.MusicResponse;
 import com.example.churchback2024.domain.GroupC;
 import com.example.churchback2024.domain.Music;
+import com.example.churchback2024.domain.MusicSetList;
 import com.example.churchback2024.dto.MusicDto;
 import com.example.churchback2024.exception.group.GroupNotFoundException;
 import com.example.churchback2024.exception.music.DuplicateMusicException;
 import com.example.churchback2024.exception.music.MusicNotFoundException;
 import com.example.churchback2024.repository.GroupRepository;
 import com.example.churchback2024.repository.MusicRepository;
+import com.example.churchback2024.repository.MusicSetListRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,6 +38,7 @@ import java.util.stream.Collectors;
 public class MusicService {
     private final MusicRepository musicRepository;
     private final GroupRepository groupRepository;
+    private final MusicSetListRepository musicSetListRepository;
     private final AmazonS3 amazonS3;
 
     @Value("${cloud.aws.s3.bucket}")
@@ -138,6 +141,8 @@ public class MusicService {
         if(music == null){
             throw new MusicNotFoundException();
         }
+        List<MusicSetList> musicSetList = musicSetListRepository.findByMusicMusicId(musicId);
+        musicSetListRepository.deleteAll(musicSetList);
         musicRepository.deleteById(musicId);
     }
 
