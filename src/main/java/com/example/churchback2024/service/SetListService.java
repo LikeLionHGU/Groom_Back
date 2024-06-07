@@ -107,4 +107,14 @@ public class SetListService {
         }
         musicSetListRepository.delete(musicSetList);
     }
+
+    public void deleteSetList(Long setListId) {
+        SetList setList = setListRepository.findBySetListId(setListId);
+        if (setList == null) {
+            throw new SetListNotFoundException();
+        }
+        List<MusicSetList> musicSetList = musicSetListRepository.findBySetListSetListId(setListId);
+        musicSetListRepository.deleteAll(musicSetList);
+        setListRepository.deleteById(setListId);
+    }
 }

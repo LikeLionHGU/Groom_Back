@@ -49,4 +49,8 @@ public class SetListController {
     public void deleteSetListMusic(@PathVariable Long setListId, @PathVariable Long musicId) {
         setListService.deleteSetListMusic(setListId, musicId);
     }
+    @DeleteMapping("/delete/{setListId}")
+    public void deleteSetList(@PathVariable Long setListId) {
+        setListService.deleteSetList(setListId);
+    }
 }

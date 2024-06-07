@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface SetListRepository extends JpaRepository<SetList, Long> {
     List<SetList> findByGroupGroupId(Long groupId);
+
+    SetList findBySetListId(Long setListId);
 }
