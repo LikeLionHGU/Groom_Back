@@ -9,9 +9,11 @@ import lombok.NoArgsConstructor;
 public class MemberInfoResponse {
     private String nickname;
     private String position;
+    private String description;
 
     public MemberInfoResponse(GroupDto groupDto) {
         this.nickname = groupDto.getNickname();
         this.position = groupDto.getPosition();
+        this.description = groupDto.getDescription();
     }
 }

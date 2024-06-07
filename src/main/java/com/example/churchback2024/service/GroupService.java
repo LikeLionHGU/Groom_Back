@@ -109,7 +109,7 @@ public class GroupService {
         GroupC newGroup = GroupC.from(groupDto, invitationCode, generateImageUrl(defaultImg));
         groupRepository.save(newGroup);
 
-        MemberGroup memberGroup = MemberGroup.from(member, newGroup, groupDto);
+        MemberGroup memberGroup = MemberGroup.from(member, newGroup, groupDto, null);
         memberGroupRepository.save(memberGroup);
         return GroupDto.from(newGroup);
     }
@@ -135,7 +135,7 @@ public class GroupService {
             throw new DuplicateGroupException();
         }
 
-        memberGroup = MemberGroup.from(member, groupC, groupDto);
+        memberGroup = MemberGroup.from(member, groupC, groupDto, null);
         memberGroupRepository.save(memberGroup);
 
         return GroupDto.from(memberGroup);

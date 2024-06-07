@@ -27,12 +27,14 @@ public class MemberGroup extends BaseEntity{
 
     private String position;
     private String nickname;
-    public static MemberGroup from(Member member, GroupC groupC, GroupDto groupDto){
+    private String description;
+    public static MemberGroup from(Member member, GroupC groupC, GroupDto groupDto, String description){
         return MemberGroup.builder()
                 .member(member)
                 .groupC(groupC)
                 .position(groupDto.getPosition())
                 .nickname(groupDto.getNickname())
+                .description(description)
                 .build();
     }
 }

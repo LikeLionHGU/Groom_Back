@@ -15,6 +15,7 @@ public class MemberGroupResponse {
     private String nickname;
     private String position;
     private String invitation_code;
+    private String description;
 
     public MemberGroupResponse(MemberGroup memberGroup){
         this.groupId = memberGroup.getGroupC().getGroupId();
@@ -22,6 +23,7 @@ public class MemberGroupResponse {
         this.memberId = memberGroup.getMember().getMemberId();
         this.position = memberGroup.getPosition();
         this.nickname = memberGroup.getNickname();
+        this.description = memberGroup.getDescription();
     }
 
     public MemberGroupResponse(MemberGroupDto memberGroupDto) {
@@ -31,5 +33,6 @@ public class MemberGroupResponse {
         this.position = memberGroupDto.getPosition();
         this.nickname = memberGroupDto.getNickname();
         this.invitation_code = memberGroupDto.getInvitation_code();
+        this.description = memberGroupDto.getDescription();
     }
 }

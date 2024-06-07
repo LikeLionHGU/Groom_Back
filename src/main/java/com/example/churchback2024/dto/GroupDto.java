@@ -43,14 +43,12 @@ public class GroupDto {
     public static GroupDto from(GroupUpdateRequest groupUpdateRequest) {
         return GroupDto.builder()
                 .groupName(groupUpdateRequest.getGroupName())
-                .description(groupUpdateRequest.getDescription())
                 .build();
     }
     public static GroupDto from(GroupC groupC) {
         return GroupDto.builder()
                 .groupId(groupC.getGroupId())
                 .groupName(groupC.getGroupName())
-                .description(groupC.getDescription())
                 .groupImage(groupC.getGroupImage())
                 .build();
     }

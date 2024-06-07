@@ -12,4 +12,5 @@ public class GroupAddRequest {
     private String invitationCode;
     private String position;
     private String nickname;
+    private String description;
 }

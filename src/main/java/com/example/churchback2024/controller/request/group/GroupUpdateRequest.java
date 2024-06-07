@@ -10,5 +10,4 @@ import org.springframework.web.multipart.MultipartFile;
 @Data
 public class GroupUpdateRequest {
     private String groupName;
-    private String description;
 }

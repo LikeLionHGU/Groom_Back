@@ -18,6 +18,7 @@ public class MemberGroupDto {
     private String position;
     private String nickname;
     private String invitation_code;
+    private String description;
 
     public static MemberGroupDto from(MemberGroup memberGroup) {
         return MemberGroupDto.builder()
@@ -28,6 +29,7 @@ public class MemberGroupDto {
                 .position(memberGroup.getPosition())
                 .nickname(memberGroup.getNickname())
                 .invitation_code(memberGroup.getGroupC().getInvitationCode())
+                .description(memberGroup.getDescription())
                 .build();
     }
 
