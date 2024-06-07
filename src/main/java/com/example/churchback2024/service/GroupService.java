@@ -104,8 +104,9 @@ public class GroupService {
         do {
             invitationCode = generateRandomInvitationCode();
         } while (groupRepository.findByInvitationCode(invitationCode) != null);
+        String defaultImg = "지히/defaultImg.svg_898e4dfc-f740-458e-850f-42f0800ba78b";
 
-        GroupC newGroup = GroupC.from(groupDto, invitationCode);
+        GroupC newGroup = GroupC.from(groupDto, invitationCode, generateImageUrl(defaultImg));
         groupRepository.save(newGroup);
 
         MemberGroup memberGroup = MemberGroup.from(member, newGroup, groupDto);

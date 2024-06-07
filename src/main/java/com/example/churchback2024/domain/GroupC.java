@@ -23,7 +23,6 @@ public class GroupC extends BaseEntity{
     private String invitationCode;
     private String groupImage;
     private String description;
-
     public void update(GroupDto groupDto, String groupImage) {
         this.groupName = groupDto.getGroupName();
         this.groupImage = groupImage;
@@ -36,11 +35,12 @@ public class GroupC extends BaseEntity{
                 .build();
     }
 
-    public static GroupC from(GroupDto groupDto, String invitationCode) {
+    public static GroupC from(GroupDto groupDto, String invitationCode, String defaultImg) {
         return GroupC.builder()
                 .groupName(groupDto.getGroupName())
                 .invitationCode(invitationCode)
                 .groupId(groupDto.getGroupId())
+                .groupImage(defaultImg)
                 .build();
     }
 }
