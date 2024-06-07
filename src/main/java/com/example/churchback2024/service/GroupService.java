@@ -205,4 +205,11 @@ public class GroupService {
     private String generateImageUrl(String storedFileName) {
         return "https://" + bucket + ".s3." + region + ".amazonaws.com/" + storedFileName;
     }
+
+    public void deleteMemberGroup(Long groupId, Long memberId) {
+        GroupC group = groupRepository.findById(groupId).orElseThrow();
+        Member member = memberRepository.findById(memberId).orElseThrow();
+        MemberGroup memberGroup = memberGroupRepository.findByMemberAndGroupC(member, group);
+        memberGroupRepository.delete(memberGroup);
+    }
 }
