@@ -21,8 +21,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -147,5 +148,17 @@ public class SetListService {
                     .build();
             musicSetListRepository.save(musicSetList);
         }
+    }
+    public List<byte[]> convertImagesToPdfs(List<MultipartFile> images) throws IOException {
+        List<byte[]> pdfFiles = new ArrayList<>();
+        for (MultipartFile image : images) {
+            pdfFiles.add(MusicService.convertImageToPdf(image));
+        }
+        return pdfFiles;
+    }
+
+    public String getSetListName(Long setListId) {
+        SetList setList = setListRepository.findBySetListId(setListId);
+        return setList.getSetListName();
     }
 }

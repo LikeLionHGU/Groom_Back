@@ -5,7 +5,6 @@ import com.example.churchback2024.controller.request.music.MusicListRequest;
 import com.example.churchback2024.controller.request.music.MusicUpdateRequest;
 import com.example.churchback2024.controller.response.music.MusicListResponse;
 import com.example.churchback2024.controller.response.music.MusicResponse;
-import com.example.churchback2024.domain.Music;
 import com.example.churchback2024.dto.MusicDto;
 import com.example.churchback2024.service.MusicService;
 import lombok.RequiredArgsConstructor;
@@ -15,11 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 @RestController
 @RequiredArgsConstructor
@@ -72,38 +67,15 @@ public class MusicController {
     }
     @PostMapping("/convertToPdf")
     public ResponseEntity<byte[]> convertImageToPdf(@RequestParam("image") MultipartFile image) throws IOException {
-        byte[] pdfBytes = musicService.convertImageToPdf(image);
+        byte[] pdfBytes = MusicService.convertImageToPdf(image);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData("attachment", "converted.pdf");
+        headers.setContentDispositionFormData("attachment", image.getName() + ".pdf");
 
         return ResponseEntity.ok()
                 .headers(headers)
                 .body(pdfBytes);
-    }
-
-    @PostMapping("/convertToPdfs")
-    public ResponseEntity<byte[]> convertImagesToPdfs(@RequestParam("images") List<MultipartFile> images) throws IOException {
-        List<byte[]> pdfFiles = musicService.convertImagesToPdfs(images);
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        try (ZipOutputStream zos = new ZipOutputStream(baos)) {
-            for (int i = 0; i < pdfFiles.size(); i++) {
-                ZipEntry entry = new ZipEntry("converted_" + (i + 1) + ".pdf");
-                zos.putNextEntry(entry);
-                zos.write(pdfFiles.get(i));
-                zos.closeEntry();
-            }
-        }
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        headers.setContentDispositionFormData("attachment", "converted_pdfs.zip");
-
-        return ResponseEntity.ok()
-                .headers(headers)
-                .body(baos.toByteArray());
     }
 }
 

@@ -31,7 +31,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -171,7 +170,7 @@ public class MusicService {
         return "https://" + bucket + ".s3." + region + ".amazonaws.com/" + storedFileName;
     }
 
-    public byte[] convertImageToPdf(MultipartFile image) throws IOException {
+    public static byte[] convertImageToPdf(MultipartFile image) throws IOException {
         PDDocument document = new PDDocument();
         PDPage page = new PDPage();
         document.addPage(page);
@@ -186,13 +185,5 @@ public class MusicService {
         document.close();
 
         return outputStream.toByteArray();
-    }
-
-    public List<byte[]> convertImagesToPdfs(List<MultipartFile> images) throws IOException {
-        List<byte[]> pdfFiles = new ArrayList<>();
-        for (MultipartFile image : images) {
-            pdfFiles.add(convertImageToPdf(image));
-        }
-        return pdfFiles;
     }
 }

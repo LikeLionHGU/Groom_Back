@@ -1,5 +1,6 @@
 package com.example.churchback2024.controller;
 
+import com.example.churchback2024.controller.request.setlist.SetListImagesRequest;
 import com.example.churchback2024.controller.request.setlist.MusicSetListCreateRequest;
 import com.example.churchback2024.controller.request.setlist.SetListCreateRequest;
 import com.example.churchback2024.controller.response.music.MusicListResponse;
@@ -8,12 +9,18 @@ import com.example.churchback2024.controller.response.setlist.SetListResponse;
 import com.example.churchback2024.dto.SetListDto;
 import com.example.churchback2024.service.SetListService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 @RestController
 @RequiredArgsConstructor
@@ -61,5 +68,27 @@ public class SetListController {
     @DeleteMapping("/delete/{setListId}")
     public void deleteSetList(@PathVariable Long setListId) {
         setListService.deleteSetList(setListId);
+    }
+    @PostMapping("/convertToPdfs")
+    public ResponseEntity<byte[]> convertImagesToPdfs(@ModelAttribute SetListImagesRequest setListImagesRequest, @RequestParam("images") List<MultipartFile> images) throws IOException {
+        List<byte[]> pdfFiles = setListService.convertImagesToPdfs(images);
+        String setListName = setListService.getSetListName(setListImagesRequest.getSetListId());
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try (ZipOutputStream zos = new ZipOutputStream(baos)) {
+            for (int i = 0; i < pdfFiles.size(); i++) {
+                ZipEntry entry = new ZipEntry(images.get(i).getName() + (i + 1) + ".pdf");
+                zos.putNextEntry(entry);
+                zos.write(pdfFiles.get(i));
+                zos.closeEntry();
+            }
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", setListName + ".zip");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(baos.toByteArray());
     }
 }
