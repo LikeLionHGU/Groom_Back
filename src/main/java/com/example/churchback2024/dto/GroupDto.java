@@ -59,6 +59,7 @@ public class GroupDto {
                 .memberId(memberGroup.getMember().getMemberId())
                 .position(memberGroup.getPosition())
                 .nickname(memberGroup.getNickname())
+                .groupImage(memberGroup.getGroupC().getGroupImage())
                 .build();
     }
 }
