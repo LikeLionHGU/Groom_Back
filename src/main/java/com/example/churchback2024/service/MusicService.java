@@ -81,15 +81,49 @@ public class MusicService {
         return amazonS3.getUrl(bucket, fileName).toString();
     }
 
-    private Optional<File> convert(MultipartFile file) throws  IOException {
-        File convertFile = new File(file.getOriginalFilename());
-        if(convertFile.createNewFile()) {
-            try (FileOutputStream fos = new FileOutputStream(convertFile)) {
-                fos.write(file.getBytes());
-            }
-            return Optional.of(convertFile);
+    private Optional<File> convert(MultipartFile file) throws IOException {
+        String fileName = file.getOriginalFilename();
+        if (fileName == null || fileName.isEmpty()) {
+            throw new IllegalArgumentException("파일 이름이 비어있거나 null입니다.");
         }
-        return Optional.empty();
+
+        // 파일 경로가 존재하는지 확인하고, 없다면 디렉토리 생성
+        File convertFile = new File(fileName);
+        File parentDir = convertFile.getParentFile();
+        if (parentDir != null && !parentDir.exists()) {
+            parentDir.mkdirs(); // 디렉토리 생성
+        }
+
+        // 파일 이름 중복 처리 (파일이 이미 존재하면 이름에 숫자를 붙여 새로운 파일 이름 생성)
+        int counter = 1;
+        String newFileName = fileName;
+        while (convertFile.exists()) {
+            String extension = "";
+            int i = fileName.lastIndexOf('.');
+            if (i > 0) {
+                extension = fileName.substring(i);  // 파일 확장자 추출
+                newFileName = fileName.substring(0, i); // 확장자를 제외한 파일 이름
+            }
+            convertFile = new File(newFileName + "_" + counter + extension);
+            counter++;
+        }
+
+        // 새로운 파일 이름으로 파일 생성
+        try {
+            if (convertFile.createNewFile()) {
+                try (FileOutputStream fos = new FileOutputStream(convertFile)) {
+                    fos.write(file.getBytes());
+                    System.out.println("파일 변환 성공");
+                    return Optional.of(convertFile);
+                }
+            } else {
+                System.out.println("파일 변환 실패: 파일을 생성할 수 없습니다.");
+                return Optional.empty();
+            }
+        } catch (IOException e) {
+            System.err.println("파일 쓰기 실패: " + e.getMessage());
+            throw e;  // 예외를 던져서 호출자가 처리할 수 있게 함
+        }
     }
 
     public MusicDto createMusic(MusicDto musicDto, MultipartFile multipartFile) throws IOException {
